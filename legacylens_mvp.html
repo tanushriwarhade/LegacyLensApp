@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0a0f;--bg2:#12121a;--bg3:#1a1a26;--bg4:#22223a;
+  --accent:#7c6fff;--accent2:#a78bfa;--accent3:#c4b5fd;
+  --green:#22c55e;--red:#ef4444;--amber:#f59e0b;--blue:#3b82f6;
+  --text:#f1f0ff;--text2:#a8a4c8;--text3:#6b677a;
+  --border:#2a2840;--border2:#3a3660;
+  --card:#12121a;--card2:#1a1a26;
+  --shadow:0 4px 24px rgba(0,0,0,0.4);
+  --radius:12px;--radius-sm:8px;--radius-lg:16px;
+}
+body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;min-height:100vh;line-height:1.6;overflow-x:hidden}
+
+/* NAV */
+nav{background:rgba(10,10,15,0.95);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:60px;position:sticky;top:0;z-index:100;backdrop-filter:blur(12px)}
+.logo{display:flex;align-items:center;gap:10px;font-size:1.25rem;font-weight:700;color:var(--text)}
+.logo-icon{width:32px;height:32px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px}
+.nav-links{display:flex;align-items:center;gap:8px}
+.nav-btn{padding:8px 16px;border-radius:var(--radius-sm);font-size:0.875rem;cursor:pointer;border:none;transition:all 0.2s}
+.nav-btn.ghost{background:transparent;color:var(--text2);border:1px solid transparent}
+.nav-btn.ghost:hover{background:var(--bg3);color:var(--text)}
+.nav-btn.primary{background:var(--accent);color:#fff;font-weight:600}
+.nav-btn.primary:hover{background:var(--accent2)}
+
+/* PAGES */
+.page{display:none;min-height:calc(100vh - 60px)}
+.page.active{display:block}
+
+/* HERO */
+.hero{padding:80px 2rem 60px;text-align:center;max-width:900px;margin:0 auto}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(124,111,255,0.15);border:1px solid rgba(124,111,255,0.3);color:var(--accent3);padding:6px 16px;border-radius:100px;font-size:0.8rem;font-weight:500;margin-bottom:24px}
+.hero-badge-dot{width:6px;height:6px;background:var(--green);border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+h1.hero-title{font-size:clamp(2.2rem,5vw,3.5rem);font-weight:800;line-height:1.15;margin-bottom:20px;letter-spacing:-0.02em}
+.hero-title span{background:linear-gradient(135deg,var(--accent),var(--accent2),#f0abfc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{font-size:1.1rem;color:var(--text2);max-width:600px;margin:0 auto 36px}
+.hero-cta{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap}
+.btn{padding:12px 28px;border-radius:var(--radius-sm);font-size:0.95rem;font-weight:600;cursor:pointer;border:none;transition:all 0.2s;display:inline-flex;align-items:center;gap:8px}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-primary:hover{background:var(--accent2);transform:translateY(-1px)}
+.btn-ghost{background:transparent;color:var(--text2);border:1px solid var(--border2)}
+.btn-ghost:hover{background:var(--bg3);color:var(--text)}
+.hero-stats{display:flex;justify-content:center;gap:40px;margin-top:48px;flex-wrap:wrap}
+.stat{text-align:center}
+.stat-num{font-size:1.75rem;font-weight:700;color:var(--accent2)}
+.stat-label{font-size:0.8rem;color:var(--text3);margin-top:2px}
+
+/* FEATURES */
+.section{padding:60px 2rem;max-width:1100px;margin:0 auto}
+.section-label{font-size:0.75rem;font-weight:600;letter-spacing:0.1em;color:var(--accent);text-transform:uppercase;margin-bottom:8px}
+.section-title{font-size:1.8rem;font-weight:700;margin-bottom:12px;letter-spacing:-0.01em}
+.section-sub{font-size:1rem;color:var(--text2);margin-bottom:40px}
+.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+.feature-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px;transition:all 0.2s}
+.feature-card:hover{border-color:var(--border2);background:var(--card2)}
+.feature-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:16px}
+.feature-title{font-size:1rem;font-weight:600;margin-bottom:8px}
+.feature-desc{font-size:0.875rem;color:var(--text2);line-height:1.6}
+
+/* PRICING */
+.pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;max-width:700px;margin:0 auto}
+.pricing-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px;position:relative}
+.pricing-card.featured{border-color:var(--accent);background:rgba(124,111,255,0.08)}
+.pricing-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--accent);color:#fff;font-size:0.75rem;font-weight:600;padding:4px 14px;border-radius:100px}
+.pricing-plan{font-size:0.85rem;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px}
+.pricing-price{font-size:2.2rem;font-weight:800;margin-bottom:4px}
+.pricing-period{font-size:0.85rem;color:var(--text3);margin-bottom:20px}
+.pricing-features{list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:24px}
+.pricing-features li{font-size:0.875rem;color:var(--text2);display:flex;align-items:center;gap:10px}
+.pricing-features li::before{content:'';width:16px;height:16px;border-radius:50%;background:rgba(34,197,94,0.2);border:1.5px solid var(--green);flex-shrink:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='%2322c55e' d='M6.5 11.5L3 8l1-1 2.5 2.5 5-5 1 1z'/%3E%3C/svg%3E")}
+
+/* TESTIMONIALS */
+.testi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+.testi-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px}
+.testi-text{font-size:0.9rem;color:var(--text2);line-height:1.7;margin-bottom:16px;font-style:italic}
+.testi-author{display:flex;align-items:center;gap:12px}
+.testi-avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.85rem;font-weight:600;flex-shrink:0}
+.testi-name{font-size:0.875rem;font-weight:600}
+.testi-role{font-size:0.78rem;color:var(--text3)}
+
+/* DASHBOARD */
+.dash-layout{display:flex;min-height:calc(100vh - 60px)}
+.sidebar{width:240px;background:var(--bg2);border-right:1px solid var(--border);padding:24px 16px;display:flex;flex-direction:column;gap:4px;flex-shrink:0}
+.sidebar-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--radius-sm);font-size:0.875rem;cursor:pointer;color:var(--text2);transition:all 0.15s;border:none;background:none;width:100%;text-align:left}
+.sidebar-item:hover{background:var(--bg3);color:var(--text)}
+.sidebar-item.active{background:rgba(124,111,255,0.15);color:var(--accent2)}
+.sidebar-icon{font-size:16px;width:20px;text-align:center}
+.sidebar-sep{height:1px;background:var(--border);margin:8px 0}
+.dash-main{flex:1;overflow:auto;padding:32px}
+.dash-header{margin-bottom:28px}
+.dash-title{font-size:1.5rem;font-weight:700}
+.dash-sub{font-size:0.875rem;color:var(--text2);margin-top:4px}
+.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:28px}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px}
+.stat-card-label{font-size:0.75rem;color:var(--text3);margin-bottom:8px;font-weight:500;text-transform:uppercase;letter-spacing:0.06em}
+.stat-card-val{font-size:1.6rem;font-weight:700}
+.stat-card-sub{font-size:0.75rem;color:var(--text3);margin-top:4px}
+
+/* UPLOAD */
+.upload-zone{border:2px dashed var(--border2);border-radius:var(--radius-lg);padding:48px 24px;text-align:center;cursor:pointer;transition:all 0.2s;background:var(--bg3);position:relative}
+.upload-zone:hover,.upload-zone.drag{border-color:var(--accent);background:rgba(124,111,255,0.05)}
+.upload-icon{font-size:40px;margin-bottom:16px}
+.upload-title{font-size:1.1rem;font-weight:600;margin-bottom:8px}
+.upload-sub{font-size:0.875rem;color:var(--text2)}
+.upload-input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.or-divider{display:flex;align-items:center;gap:16px;margin:24px 0;color:var(--text3);font-size:0.875rem}
+.or-divider::before,.or-divider::after{content:'';flex:1;height:1px;background:var(--border)}
+.url-input-row{display:flex;gap:10px}
+.url-input{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px 16px;color:var(--text);font-size:0.9rem;outline:none}
+.url-input:focus{border-color:var(--accent)}
+.lang-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.lang-chip{padding:5px 14px;border-radius:100px;font-size:0.8rem;font-weight:500;border:1px solid;cursor:pointer;transition:all 0.2s}
+.lang-chip.java{background:rgba(239,68,68,0.1);border-color:rgba(239,68,68,0.4);color:#fca5a5}
+.lang-chip.dotnet{background:rgba(124,111,255,0.1);border-color:rgba(124,111,255,0.4);color:var(--accent3)}
+.lang-chip.cobol{background:rgba(245,158,11,0.1);border-color:rgba(245,158,11,0.4);color:#fcd34d}
+.lang-chip.python{background:rgba(59,130,246,0.1);border-color:rgba(59,130,246,0.4);color:#93c5fd}
+.lang-chip.selected{transform:scale(1.05)}
+
+/* PROGRESS */
+.progress-container{margin:24px 0}
+.progress-steps{display:flex;justify-content:space-between;margin-bottom:16px}
+.progress-step{display:flex;flex-direction:column;align-items:center;gap:6px;flex:1}
+.progress-step-circle{width:32px;height:32px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:600;transition:all 0.3s;background:var(--bg2)}
+.progress-step.done .progress-step-circle{background:var(--green);border-color:var(--green);color:#fff}
+.progress-step.active .progress-step-circle{background:var(--accent);border-color:var(--accent);color:#fff}
+.progress-step-label{font-size:0.75rem;color:var(--text3)}
+.progress-bar-wrap{height:6px;background:var(--bg4);border-radius:3px;overflow:hidden;margin-bottom:8px}
+.progress-bar-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:3px;transition:width 0.5s ease}
+.progress-status{font-size:0.8rem;color:var(--text2);text-align:center}
+
+/* REPORT */
+.report-header{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px;margin-bottom:20px}
+.report-title{font-size:1.4rem;font-weight:700;margin-bottom:8px}
+.report-meta{display:flex;flex-wrap:wrap;gap:16px;font-size:0.8rem;color:var(--text3)}
+.report-meta-item{display:flex;align-items:center;gap:6px}
+.report-tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:24px;overflow-x:auto}
+.report-tab{padding:10px 20px;font-size:0.875rem;cursor:pointer;color:var(--text2);border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap;transition:all 0.2s;background:none;border-left:none;border-right:none;border-top:none}
+.report-tab.active{color:var(--accent2);border-bottom-color:var(--accent)}
+.report-tab:hover{color:var(--text)}
+.report-section{display:none}
+.report-section.active{display:block}
+.report-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:22px;margin-bottom:16px}
+.report-card-title{font-size:0.9rem;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:16px}
+.overview-text{font-size:1rem;color:var(--text);line-height:1.75}
+
+/* RISK TABLE */
+.risk-table{width:100%;border-collapse:collapse}
+.risk-table th{font-size:0.75rem;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em;text-align:left;padding:10px 12px;border-bottom:1px solid var(--border)}
+.risk-table td{font-size:0.875rem;padding:12px;border-bottom:1px solid var(--border)}
+.risk-table tr:last-child td{border-bottom:none}
+.severity-badge{padding:3px 10px;border-radius:100px;font-size:0.72rem;font-weight:600;display:inline-block}
+.severity-high{background:rgba(239,68,68,0.15);color:#fca5a5;border:1px solid rgba(239,68,68,0.3)}
+.severity-med{background:rgba(245,158,11,0.15);color:#fcd34d;border:1px solid rgba(245,158,11,0.3)}
+.severity-low{background:rgba(34,197,94,0.15);color:#86efac;border:1px solid rgba(34,197,94,0.3)}
+
+/* ROADMAP */
+.roadmap-step{display:flex;gap:16px;margin-bottom:20px}
+.roadmap-step-num{width:32px;height:32px;border-radius:50%;background:rgba(124,111,255,0.2);border:1.5px solid var(--accent);display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:700;color:var(--accent2);flex-shrink:0}
+.roadmap-step-content{flex:1}
+.roadmap-step-title{font-size:0.95rem;font-weight:600;margin-bottom:4px}
+.roadmap-step-meta{font-size:0.8rem;color:var(--text3);margin-bottom:6px}
+.roadmap-step-desc{font-size:0.875rem;color:var(--text2)}
+
+/* COST */
+.cost-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:20px}
+.cost-card{background:var(--bg3);border-radius:var(--radius-sm);padding:18px;text-align:center}
+.cost-card-val{font-size:1.5rem;font-weight:700;color:var(--accent2)}
+.cost-card-label{font-size:0.75rem;color:var(--text3);margin-top:4px}
+.cost-breakdown{background:var(--bg3);border-radius:var(--radius-sm);padding:16px}
+.cost-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)}
+.cost-row:last-child{border-bottom:none;font-weight:600;color:var(--text)}
+.cost-row-label{font-size:0.875rem;color:var(--text2)}
+.cost-row-val{font-size:0.875rem;color:var(--accent3)}
+
+/* FILES */
+.files-list{display:flex;flex-direction:column;gap:10px}
+.file-item{background:var(--bg3);border-radius:var(--radius-sm);padding:14px 16px;display:flex;align-items:center;gap:14px}
+.file-lang-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.file-name{font-size:0.875rem;font-weight:500;flex:1}
+.file-purpose{font-size:0.8rem;color:var(--text2)}
+.file-loc{font-size:0.75rem;color:var(--text3);white-space:nowrap}
+
+/* ANALYZE BUTTON */
+.analyze-btn{width:100%;padding:15px;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;border-radius:var(--radius-sm);color:#fff;font-size:1rem;font-weight:600;cursor:pointer;margin-top:20px;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:10px}
+.analyze-btn:hover{opacity:0.9;transform:translateY(-1px)}
+.analyze-btn:disabled{opacity:0.5;cursor:not-allowed;transform:none}
+
+/* SPINNER */
+.spinner{width:18px;height:18px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin 0.7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;right:24px;background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:14px 20px;font-size:0.875rem;box-shadow:var(--shadow);z-index:1000;transform:translateX(120%);transition:transform 0.3s ease;max-width:320px}
+.toast.show{transform:translateX(0)}
+
+/* UPGRADE MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;z-index:200;backdrop-filter:blur(4px)}
+.modal{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius-lg);padding:32px;max-width:420px;width:90%;text-align:center}
+.modal-icon{font-size:48px;margin-bottom:16px}
+.modal-title{font-size:1.3rem;font-weight:700;margin-bottom:10px}
+.modal-text{font-size:0.9rem;color:var(--text2);margin-bottom:24px;line-height:1.6}
+.modal-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+
+/* HIDDEN */
+.hidden{display:none!important}
+
+/* REPORT PLACEHOLDER */
+.empty-state{text-align:center;padding:60px 20px;color:var(--text3)}
+.empty-state-icon{font-size:48px;margin-bottom:16px}
+.empty-state-title{font-size:1.1rem;font-weight:600;color:var(--text2);margin-bottom:8px}
+.empty-state-sub{font-size:0.875rem}
+
+/* HISTORY TABLE */
+.history-table{width:100%;border-collapse:collapse}
+.history-table th{font-size:0.75rem;color:var(--text3);font-weight:500;text-align:left;padding:10px 14px;border-bottom:1px solid var(--border);text-transform:uppercase;letter-spacing:0.05em}
+.history-table td{font-size:0.875rem;padding:14px;border-bottom:1px solid var(--border);color:var(--text2)}
+.history-table tr:last-child td{border-bottom:none}
+.history-table tr:hover td{background:var(--bg3)}
+.status-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:6px}
+
+/* USAGE BAR */
+.usage-bar-wrap{height:8px;background:var(--bg4);border-radius:4px;overflow:hidden;margin:8px 0}
+.usage-bar-fill{height:100%;border-radius:4px;transition:width 0.4s ease}
+
+/* API KEY INPUT */
+.api-key-section{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:20px}
+.api-key-label{font-size:0.8rem;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px}
+.api-key-row{display:flex;gap:10px}
+.api-key-input{flex:1;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 14px;color:var(--text);font-size:0.875rem;outline:none;font-family:monospace}
+.api-key-input:focus{border-color:var(--accent)}
+.api-key-btn{padding:10px 16px;background:var(--accent);border:none;border-radius:var(--radius-sm);color:#fff;font-size:0.85rem;font-weight:600;cursor:pointer;white-space:nowrap}
+
+/* FOOTER */
+footer{background:var(--bg2);border-top:1px solid var(--border);padding:40px 2rem;text-align:center}
+.footer-logo{font-size:1.1rem;font-weight:700;margin-bottom:8px}
+.footer-sub{font-size:0.8rem;color:var(--text3);margin-bottom:16px}
+.footer-links{display:flex;justify-content:center;gap:20px;font-size:0.8rem;color:var(--text3);flex-wrap:wrap}
+.footer-links a{color:var(--text3);text-decoration:none}
+.footer-links a:hover{color:var(--accent2)}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">
+    <div class="logo-icon">🔍</div>
+    LegacyLens
+  </div>
+  <div class="nav-links">
+    <button class="nav-btn ghost" onclick="showPage('landing')">Home</button>
+    <button class="nav-btn ghost" onclick="showPage('pricing')">Pricing</button>
+    <button class="nav-btn ghost" onclick="showPage('dashboard')">Dashboard</button>
+    <button class="nav-btn primary" onclick="showPage('upload')">Analyze Code →</button>
+  </div>
+</nav>
+
+<!-- LANDING PAGE -->
+<div id="page-landing" class="page active">
+  <div class="hero">
+    <div class="hero-badge">
+      <span class="hero-badge-dot"></span>
+      Built for Pune &amp; Mumbai IT Teams
+    </div>
+    <h1 class="hero-title">Cut 40% Legacy Analysis<br><span>Time &amp; Cost</span></h1>
+    <p class="hero-sub">AI-powered codebase analysis for Indian IT firms. Understand legacy Java, .NET, COBOL &amp; Python in minutes — not months. Get migration roadmaps with ₹ cost estimates.</p>
+    <div class="hero-cta">
+      <button class="btn btn-primary" onclick="showPage('upload')">🚀 Analyze Your Codebase Free</button>
+      <button class="btn btn-ghost" onclick="showPage('report-demo')">View Sample Report</button>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-num">500+</div><div class="stat-label">Codebases analyzed</div></div>
+      <div class="stat"><div class="stat-num">₹2.4Cr</div><div class="stat-label">Saved in analysis costs</div></div>
+      <div class="stat"><div class="stat-num">40%</div><div class="stat-label">Faster time-to-insight</div></div>
+      <div class="stat"><div class="stat-num">4</div><div class="stat-label">Languages supported</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">What we do</div>
+    <div class="section-title">Everything your team needs to modernize</div>
+    <div class="section-sub">From raw legacy code to boardroom-ready migration plan — in one click.</div>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon" style="background:rgba(124,111,255,0.15)">🧠</div>
+        <div class="feature-title">Plain English Explanations</div>
+        <div class="feature-desc">Understand exactly what your 10-year-old COBOL module does — no expert required. Claude AI translates code into business logic.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background:rgba(239,68,68,0.15)">⚠️</div>
+        <div class="feature-title">Risk Analysis</div>
+        <div class="feature-desc">Automatically detect SQL injection, hardcoded secrets, outdated dependencies, and technical debt. Severity-rated for your team.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background:rgba(34,197,94,0.15)">🗺️</div>
+        <div class="feature-title">Migration Roadmap</div>
+        <div class="feature-desc">Step-by-step modernization plan tailored for Indian IT teams — Spring Boot, .NET 8, microservices. With effort estimates.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background:rgba(245,158,11,0.15)">₹</div>
+        <div class="feature-title">Indian Rupee Cost Estimates</div>
+        <div class="feature-desc">Realistic cost projections at ₹1,500/hr (Indian dev rates). Time-boxed phases to fit your sprint planning &amp; finance approvals.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background:rgba(59,130,246,0.15)">📄</div>
+        <div class="feature-title">PDF Report Export</div>
+        <div class="feature-desc">Download client-ready PDF reports. Share with stakeholders, project managers, or include in RFP responses to clients.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background:rgba(196,181,253,0.15)">🔒</div>
+        <div class="feature-title">Secure &amp; Private</div>
+        <div class="feature-desc">Code is analyzed and deleted within 24 hours. SOC 2 ready. Compliant with IT Act 2000 and enterprise security policies.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" style="background:var(--bg2);max-width:100%;padding:60px 2rem">
+    <div style="max-width:1100px;margin:0 auto">
+      <div class="section-label">Testimonials</div>
+      <div class="section-title">Trusted by Pune &amp; Mumbai IT teams</div>
+      <div class="testi-grid">
+        <div class="testi-card">
+          <div class="testi-text">"We used LegacyLens to analyze a 15-year-old Java banking system for a client. Got the migration roadmap in 20 minutes — saved us 3 weeks of discovery. The ₹ cost estimates were spot on."</div>
+          <div class="testi-author">
+            <div class="testi-avatar" style="background:rgba(124,111,255,0.2);color:var(--accent2)">RK</div>
+            <div><div class="testi-name">Rahul Kulkarni</div><div class="testi-role">Architect, TCS Pune</div></div>
+          </div>
+        </div>
+        <div class="testi-card">
+          <div class="testi-text">"Our client had 200K lines of COBOL that nobody understood. LegacyLens gave us a plain English breakdown and a 3-phase migration plan. Presented it to the board the same day."</div>
+          <div class="testi-author">
+            <div class="testi-avatar" style="background:rgba(34,197,94,0.15);color:var(--green)">PM</div>
+            <div><div class="testi-name">Priya Mehta</div><div class="testi-role">Tech Lead, Infosys Pune</div></div>
+          </div>
+        </div>
+        <div class="testi-card">
+          <div class="testi-text">"The risk analysis caught 3 SQL injection vulnerabilities in legacy code that had been live for 8 years. The fix cost estimate helped us get budget approved immediately."</div>
+          <div class="testi-author">
+            <div class="testi-avatar" style="background:rgba(245,158,11,0.15);color:var(--amber)">AS</div>
+            <div><div class="testi-name">Amit Shah</div><div class="testi-role">CTO, Persistent Systems</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="pricing-section">
+    <div class="section-label">Pricing</div>
+    <div class="section-title" style="text-align:center">Start free, scale as you grow</div>
+    <div class="section-sub" style="text-align:center">No hidden fees. Cancel anytime.</div>
+    <div class="pricing-grid">
+      <div class="pricing-card">
+        <div class="pricing-plan">Free</div>
+        <div class="pricing-price">₹0</div>
+        <div class="pricing-period">Forever free</div>
+        <ul class="pricing-features">
+          <li>1 repository analysis</li>
+          <li>Up to 10,000 LOC</li>
+          <li>Java &amp; Python support</li>
+          <li>PDF report export</li>
+          <li>Risk analysis (basic)</li>
+          <li>Community support</li>
+        </ul>
+        <button class="btn btn-ghost" style="width:100%" onclick="showPage('upload')">Get Started Free</button>
+      </div>
+      <div class="pricing-card featured">
+        <div class="pricing-badge">Most Popular</div>
+        <div class="pricing-plan">Pro</div>
+        <div class="pricing-price">₹15,000</div>
+        <div class="pricing-period">per month + GST</div>
+        <ul class="pricing-features">
+          <li>Unlimited repositories</li>
+          <li>Unlimited LOC</li>
+          <li>All 4 languages (Java, .NET, COBOL, Python)</li>
+          <li>Priority AI analysis</li>
+          <li>Advanced risk scoring</li>
+          <li>Custom migration templates</li>
+          <li>Dedicated Slack support</li>
+          <li>Team collaboration (5 seats)</li>
+        </ul>
+        <button class="btn btn-primary" style="width:100%" onclick="showUpgrade()">Start 14-day Trial →</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-logo">🔍 LegacyLens</div>
+    <div class="footer-sub">AI-powered legacy code analysis for Indian IT firms. Built in Pune. 🇮🇳</div>
+    <div class="footer-links">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+      <a href="#">IT Act 2000 Compliance</a>
+      <a href="#">support@legacylens.in</a>
+    </div>
+  </footer>
+</div>
+
+<!-- PRICING PAGE -->
+<div id="page-pricing" class="page">
+  <div class="section" style="max-width:800px">
+    <div class="section-label">Pricing</div>
+    <div class="section-title">Simple, transparent pricing</div>
+    <div class="pricing-grid">
+      <div class="pricing-card">
+        <div class="pricing-plan">Free</div>
+        <div class="pricing-price">₹0</div>
+        <div class="pricing-period">Forever free</div>
+        <ul class="pricing-features">
+          <li>1 repository analysis</li>
+          <li>Up to 10,000 LOC</li>
+          <li>Java &amp; Python support</li>
+          <li>PDF report export</li>
+          <li>Risk analysis (basic)</li>
+          <li>Community support</li>
+        </ul>
+        <button class="btn btn-ghost" style="width:100%" onclick="showPage('upload')">Get Started Free</button>
+      </div>
+      <div class="pricing-card featured">
+        <div class="pricing-badge">Most Popular</div>
+        <div class="pricing-plan">Pro</div>
+        <div class="pricing-price">₹15,000</div>
+        <div class="pricing-period">per month + GST</div>
+        <ul class="pricing-features">
+          <li>Unlimited repositories</li>
+          <li>Unlimited LOC</li>
+          <li>All 4 languages</li>
+          <li>Priority AI analysis</li>
+          <li>Advanced risk scoring</li>
+          <li>Custom migration templates</li>
+          <li>Dedicated Slack support</li>
+          <li>Team collaboration (5 seats)</li>
+        </ul>
+        <button class="btn btn-primary" style="width:100%" onclick="showUpgrade()">Start 14-day Trial →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DASHBOARD PAGE -->
+<div id="page-dashboard" class="page">
+  <div class="dash-layout">
+    <div class="sidebar">
+      <button class="sidebar-item active" onclick="switchDashTab('overview')"><span class="sidebar-icon">📊</span> Overview</button>
+      <button class="sidebar-item" onclick="showPage('upload')"><span class="sidebar-icon">⬆️</span> New Analysis</button>
+      <button class="sidebar-item" onclick="switchDashTab('history')"><span class="sidebar-icon">📁</span> History</button>
+      <div class="sidebar-sep"></div>
+      <button class="sidebar-item" onclick="switchDashTab('settings')"><span class="sidebar-icon">⚙️</span> Settings</button>
+      <button class="sidebar-item" onclick="showPage('landing')"><span class="sidebar-icon">🏠</span> Home</button>
+    </div>
+    <div class="dash-main">
+      <div id="dash-overview">
+        <div class="dash-header">
+          <div class="dash-title">Welcome back, Rahul 👋</div>
+          <div class="dash-sub">Here's your LegacyLens usage overview</div>
+        </div>
+        <div class="stats-row">
+          <div class="stat-card">
+            <div class="stat-card-label">Repos Analyzed</div>
+            <div class="stat-card-val" style="color:var(--accent2)">1</div>
+            <div class="stat-card-sub">1 of 1 free used</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-label">LOC Scanned</div>
+            <div class="stat-card-val" style="color:var(--green)">8,240</div>
+            <div class="stat-card-sub">of 10K free limit</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-label">Risks Found</div>
+            <div class="stat-card-val" style="color:var(--red)">7</div>
+            <div class="stat-card-sub">3 high, 4 medium</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-label">Est. Fix Cost</div>
+            <div class="stat-card-val" style="color:var(--amber)">₹8.2L</div>
+            <div class="stat-card-sub">12 weeks estimate</div>
+          </div>
+        </div>
+        <div class="report-card" style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;margin-bottom:16px">
+          <div class="report-card-title">Free Plan Usage</div>
+          <div style="font-size:0.85rem;color:var(--text2);margin-bottom:8px">Repositories: 1 of 1 used</div>
+          <div class="usage-bar-wrap"><div class="usage-bar-fill" style="width:100%;background:var(--red)"></div></div>
+          <div style="font-size:0.85rem;color:var(--text2);margin-top:12px;margin-bottom:8px">LOC: 8,240 of 10,000</div>
+          <div class="usage-bar-wrap"><div class="usage-bar-fill" style="width:82.4%;background:var(--amber)"></div></div>
+          <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
+            <div style="font-size:0.875rem;color:var(--text2)">Upgrade for unlimited analysis</div>
+            <button class="btn btn-primary" style="padding:8px 18px;font-size:0.85rem" onclick="showUpgrade()">Upgrade to Pro →</button>
+          </div>
+        </div>
+        <div class="report-card" style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px">
+          <div class="report-card-title">Recent Analyses</div>
+          <table class="history-table">
+            <thead><tr><th>Repository</th><th>Language</th><th>LOC</th><th>Risks</th><th>Status</th><th></th></tr></thead>
+            <tbody>
+              <tr>
+                <td style="font-weight:500;color:var(--text)">inventory-mgmt-legacy</td>
+                <td><span class="lang-chip java" style="cursor:default">Java</span></td>
+                <td>8,240</td>
+                <td><span style="color:var(--red)">3H</span> <span style="color:var(--amber)">4M</span></td>
+                <td><span class="status-dot" style="background:var(--green)"></span>Complete</td>
+                <td><button class="btn btn-ghost" style="padding:4px 12px;font-size:0.78rem" onclick="showPage('report-demo')">View →</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div id="dash-history" class="hidden">
+        <div class="dash-header"><div class="dash-title">Analysis History</div></div>
+        <div class="empty-state">
+          <div class="empty-state-icon">📁</div>
+          <div class="empty-state-title">Only 1 analysis so far</div>
+          <div class="empty-state-sub">Upgrade to Pro to analyze unlimited repos</div>
+        </div>
+      </div>
+      <div id="dash-settings" class="hidden">
+        <div class="dash-header"><div class="dash-title">Settings</div></div>
+        <div class="api-key-section">
+          <div class="api-key-label">🔑 Anthropic API Key</div>
+          <p style="font-size:0.8rem;color:var(--text2);margin-bottom:12px">Enter your Anthropic API key to enable AI analysis. Get one at console.anthropic.com</p>
+          <div class="api-key-row">
+            <input type="password" class="api-key-input" id="settings-api-key" placeholder="sk-ant-api03-..." />
+            <button class="api-key-btn" onclick="saveApiKey()">Save Key</button>
+          </div>
+          <p style="font-size:0.75rem;color:var(--text3);margin-top:8px">⚠️ Your key is stored in browser localStorage only. Never shared with our servers.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- UPLOAD PAGE -->
+<div id="page-upload" class="page">
+  <div style="max-width:700px;margin:0 auto;padding:40px 2rem">
+    <div style="margin-bottom:28px">
+      <button class="btn btn-ghost" style="padding:6px 12px;font-size:0.8rem;margin-bottom:16px" onclick="showPage('dashboard')">← Back</button>
+      <h2 style="font-size:1.5rem;font-weight:700">Analyze Your Codebase</h2>
+      <p style="color:var(--text2);font-size:0.9rem;margin-top:6px">Upload a ZIP file or paste a GitHub URL. Free tier: 1 repo, up to 10K LOC.</p>
+    </div>
+
+    <div class="api-key-section">
+      <div class="api-key-label">🔑 Anthropic API Key Required</div>
+      <p style="font-size:0.8rem;color:var(--text2);margin-bottom:10px">Enter your API key to run AI analysis. <a href="https://console.anthropic.com" style="color:var(--accent2)">Get one free →</a></p>
+      <div class="api-key-row">
+        <input type="password" class="api-key-input" id="upload-api-key" placeholder="sk-ant-api03-..." />
+        <button class="api-key-btn" onclick="saveApiKey()">Save</button>
+      </div>
+    </div>
+
+    <div id="upload-form">
+      <div class="upload-zone" id="drop-zone" ondragover="handleDrag(event)" ondrop="handleDrop(event)">
+        <input type="file" class="upload-input" id="file-input" accept=".zip,.java,.py,.cs,.cbl,.cobol" onchange="handleFileSelect(event)" />
+        <div class="upload-icon">📦</div>
+        <div class="upload-title">Drop your codebase here</div>
+        <div class="upload-sub">Supports ZIP, .java, .py, .cs, .cbl files up to 50MB</div>
+      </div>
+
+      <div class="or-divider">or</div>
+
+      <div class="url-input-row">
+        <input type="text" class="url-input" id="git-url" placeholder="https://github.com/your-org/legacy-repo" />
+        <button class="btn btn-ghost" onclick="handleGitUrl()">Fetch</button>
+      </div>
+
+      <div style="margin-top:20px">
+        <div style="font-size:0.8rem;color:var(--text3);margin-bottom:10px;font-weight:500;text-transform:uppercase;letter-spacing:0.06em">Or paste code directly</div>
+        <textarea id="code-input" style="width:100%;height:180px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px;color:var(--text);font-size:0.85rem;font-family:monospace;outline:none;resize:vertical;line-height:1.6" placeholder="// Paste your legacy code here (Java, Python, COBOL, C#)&#10;// Example:&#10;public class UserAuth {&#10;    String connStr = &quot;jdbc:mysql://prod-db:3306/users&quot;;&#10;    String pass = &quot;admin123&quot;;  // Hardcoded!&#10;}"></textarea>
+        
+        <div style="margin-top:12px">
+          <div style="font-size:0.8rem;color:var(--text3);margin-bottom:8px;font-weight:500;text-transform:uppercase;letter-spacing:0.06em">Language</div>
+          <div class="lang-chips">
+            <div class="lang-chip java selected" onclick="selectLang('java',this)">☕ Java</div>
+            <div class="lang-chip dotnet" onclick="selectLang('dotnet',this)"># .NET/C#</div>
+            <div class="lang-chip cobol" onclick="selectLang('cobol',this)">📟 COBOL</div>
+            <div class="lang-chip python" onclick="selectLang('python',this)">🐍 Python</div>
+          </div>
+        </div>
+      </div>
+
+      <button class="analyze-btn" id="analyze-btn" onclick="startAnalysis()">
+        🔍 Analyze with Claude AI
+      </button>
+    </div>
+
+    <div id="upload-progress" class="hidden">
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px">
+        <h3 style="font-size:1.1rem;font-weight:600;margin-bottom:24px">Analyzing your codebase...</h3>
+        <div class="progress-steps">
+          <div class="progress-step" id="step-parse"><div class="progress-step-circle">1</div><div class="progress-step-label">Parsing</div></div>
+          <div class="progress-step" id="step-ai"><div class="progress-step-circle">2</div><div class="progress-step-label">AI Analysis</div></div>
+          <div class="progress-step" id="step-report"><div class="progress-step-circle">3</div><div class="progress-step-label">Report</div></div>
+        </div>
+        <div class="progress-container">
+          <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progress-fill" style="width:0%"></div></div>
+          <div class="progress-status" id="progress-status">Initializing...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- REPORT PAGE -->
+<div id="page-report-demo" class="page">
+  <div style="max-width:900px;margin:0 auto;padding:32px 2rem">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px">
+      <button class="btn btn-ghost" style="padding:6px 12px;font-size:0.8rem" onclick="showPage('dashboard')">← Dashboard</button>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-ghost" style="padding:8px 16px;font-size:0.85rem" onclick="showToast('PDF export coming in full version!')">📄 Export PDF</button>
+        <button class="btn btn-ghost" style="padding:8px 16px;font-size:0.85rem" onclick="showToast('Share link copied!')">🔗 Share</button>
+      </div>
+    </div>
+
+    <div class="report-header">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap">
+        <div>
+          <div class="report-title" id="report-title">inventory-mgmt-legacy</div>
+          <div class="report-meta" id="report-meta">
+            <span class="report-meta-item">☕ Java</span>
+            <span class="report-meta-item">📏 8,240 LOC</span>
+            <span class="report-meta-item">📁 12 files</span>
+            <span class="report-meta-item">🗓️ Analyzed just now</span>
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:center">
+          <div style="text-align:center;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);border-radius:var(--radius-sm);padding:10px 16px">
+            <div style="font-size:1.3rem;font-weight:700;color:#fca5a5">3</div>
+            <div style="font-size:0.7rem;color:var(--text3)">HIGH RISKS</div>
+          </div>
+          <div style="text-align:center;background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.3);border-radius:var(--radius-sm);padding:10px 16px">
+            <div style="font-size:1.3rem;font-weight:700;color:#fcd34d">4</div>
+            <div style="font-size:0.7rem;color:var(--text3)">MED RISKS</div>
+          </div>
+          <div style="text-align:center;background:rgba(124,111,255,0.1);border:1px solid rgba(124,111,255,0.3);border-radius:var(--radius-sm);padding:10px 16px">
+            <div style="font-size:1.3rem;font-weight:700;color:var(--accent2)">₹8.2L</div>
+            <div style="font-size:0.7rem;color:var(--text3)">TOTAL COST</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="report-tabs">
+      <button class="report-tab active" onclick="switchTab('overview')">Overview</button>
+      <button class="report-tab" onclick="switchTab('files')">Files</button>
+      <button class="report-tab" onclick="switchTab('risks')">Risks</button>
+      <button class="report-tab" onclick="switchTab('roadmap')">Migration Roadmap</button>
+      <button class="report-tab" onclick="switchTab('cost')">Cost Estimate</button>
+    </div>
+
+    <div id="tab-overview" class="report-section active">
+      <div class="report-card">
+        <div class="report-card-title">AI Summary</div>
+        <div class="overview-text" id="overview-text">
+          This is a <strong>legacy Java inventory management system</strong> built circa 2011, using JDBC for direct database access and Servlet-based HTTP handling. The application manages product catalog, stock levels, purchase orders, and user authentication across 12 classes.<br><br>
+          The codebase uses a <strong>monolithic MVC pattern</strong> with tight coupling between business logic and data access. Database connections are managed manually without connection pooling, creating scalability risks under load.<br><br>
+          <strong>Key capabilities:</strong> User auth &amp; RBAC, inventory CRUD, PO workflow, basic reporting via raw SQL, session management via HttpSession.
+        </div>
+      </div>
+      <div class="report-card">
+        <div class="report-card-title">Tech Stack Detected</div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px">
+          <span class="lang-chip java" style="cursor:default">Java 8</span>
+          <span class="lang-chip" style="background:rgba(59,130,246,0.1);border-color:rgba(59,130,246,0.4);color:#93c5fd;cursor:default">JDBC</span>
+          <span class="lang-chip" style="background:rgba(34,197,94,0.1);border-color:rgba(34,197,94,0.4);color:#86efac;cursor:default">Servlets</span>
+          <span class="lang-chip" style="background:rgba(124,111,255,0.1);border-color:rgba(124,111,255,0.4);color:var(--accent3);cursor:default">JSP</span>
+          <span class="lang-chip" style="background:rgba(245,158,11,0.1);border-color:rgba(245,158,11,0.4);color:#fcd34d;cursor:default">MySQL 5.7</span>
+          <span class="lang-chip" style="background:rgba(239,68,68,0.1);border-color:rgba(239,68,68,0.4);color:#fca5a5;cursor:default">Tomcat 7</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="tab-files" class="report-section">
+      <div class="report-card">
+        <div class="report-card-title">File Breakdown</div>
+        <div class="files-list" id="files-list">
+          <div class="file-item"><div class="file-lang-dot" style="background:var(--red)"></div><div style="flex:1"><div class="file-name">UserAuth.java</div><div class="file-purpose">User authentication, login/logout, session management</div></div><div class="file-loc">320 LOC</div></div>
+          <div class="file-item"><div class="file-lang-dot" style="background:var(--red)"></div><div style="flex:1"><div class="file-name">InventoryDAO.java</div><div class="file-purpose">Data access layer — all DB CRUD operations via raw JDBC</div></div><div class="file-loc">1,240 LOC</div></div>
+          <div class="file-item"><div class="file-lang-dot" style="background:var(--red)"></div><div style="flex:1"><div class="file-name">PurchaseOrderService.java</div><div class="file-purpose">PO creation, approval workflow, supplier comm.</div></div><div class="file-loc">890 LOC</div></div>
+          <div class="file-item"><div class="file-lang-dot" style="background:var(--red)"></div><div style="flex:1"><div class="file-name">ReportGenerator.java</div><div class="file-purpose">Inventory, sales &amp; audit reports via raw SQL queries</div></div><div class="file-loc">650 LOC</div></div>
+          <div class="file-item"><div class="file-lang-dot" style="background:var(--red)"></div><div style="flex:1"><div class="file-name">DBConnection.java</div><div class="file-purpose">Database connection factory — no pooling, hardcoded creds</div></div><div class="file-loc">120 LOC</div></div>
+          <div class="file-item"><div class="file-lang-dot" style="background:var(--red)"></div><div style="flex:1"><div class="file-name">InventoryServlet.java</div><div class="file-purpose">HTTP request handler — tightly coupled with DAO</div></div><div class="file-loc">540 LOC</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="tab-risks" class="report-section">
+      <div class="report-card">
+        <div class="report-card-title">Security &amp; Technical Debt Risks</div>
+        <table class="risk-table" id="risk-table">
+          <thead><tr><th>Issue</th><th>File</th><th>Severity</th><th>Est. Fix Cost</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td style="font-weight:500;color:var(--text)">SQL Injection</td><td style="color:var(--text3);font-size:0.8rem">InventoryDAO.java:234</td><td><span class="severity-badge severity-high">HIGH</span></td><td style="color:var(--accent2)">₹20,000</td><td style="color:var(--text2);font-size:0.8rem">Raw string concatenation in SQL queries enables injection attacks</td></tr>
+            <tr><td style="font-weight:500;color:var(--text)">Hardcoded Credentials</td><td style="color:var(--text3);font-size:0.8rem">DBConnection.java:15</td><td><span class="severity-badge severity-high">HIGH</span></td><td style="color:var(--accent2)">₹8,000</td><td style="color:var(--text2);font-size:0.8rem">DB password hardcoded in source. Immediate security breach risk.</td></tr>
+            <tr><td style="font-weight:500;color:var(--text)">Plaintext Passwords</td><td style="color:var(--text3);font-size:0.8rem">UserAuth.java:67</td><td><span class="severity-badge severity-high">HIGH</span></td><td style="color:var(--accent2)">₹15,000</td><td style="color:var(--text2);font-size:0.8rem">User passwords stored/compared in plaintext. No hashing (bcrypt/Argon2).</td></tr>
+            <tr><td style="font-weight:500;color:var(--text)">No Connection Pooling</td><td style="color:var(--text3);font-size:0.8rem">DBConnection.java</td><td><span class="severity-badge severity-med">MEDIUM</span></td><td style="color:var(--accent2)">₹12,000</td><td style="color:var(--text2);font-size:0.8rem">New DB connection per request. App will fail under moderate load.</td></tr>
+            <tr><td style="font-weight:500;color:var(--text)">N+1 Query Pattern</td><td style="color:var(--text3);font-size:0.8rem">ReportGenerator.java:89</td><td><span class="severity-badge severity-med">MEDIUM</span></td><td style="color:var(--accent2)">₹18,000</td><td style="color:var(--text2);font-size:0.8rem">Loop queries inside loop causing O(n) DB calls. Severe perf issue at scale.</td></tr>
+            <tr><td style="font-weight:500;color:var(--text)">No CSRF Protection</td><td style="color:var(--text3);font-size:0.8rem">InventoryServlet.java</td><td><span class="severity-badge severity-med">MEDIUM</span></td><td style="color:var(--accent2)">₹10,000</td><td style="color:var(--text2);font-size:0.8rem">POST endpoints lack CSRF token validation. Cross-site request forgery possible.</td></tr>
+            <tr><td style="font-weight:500;color:var(--text)">Dead Code / Unused Methods</td><td style="color:var(--text3);font-size:0.8rem">Multiple files</td><td><span class="severity-badge severity-low">LOW</span></td><td style="color:var(--accent2)">₹5,000</td><td style="color:var(--text2);font-size:0.8rem">~800 LOC of unused/commented out code. Increases maintenance burden.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div id="tab-roadmap" class="report-section">
+      <div class="report-card">
+        <div class="report-card-title">Migration Roadmap</div>
+        <div id="roadmap-steps">
+          <div class="roadmap-step">
+            <div class="roadmap-step-num">1</div>
+            <div class="roadmap-step-content">
+              <div class="roadmap-step-title">Security Hardening &amp; Critical Fixes</div>
+              <div class="roadmap-step-meta">⏱️ 2 weeks &nbsp;|&nbsp; 💰 ₹1,20,000 &nbsp;|&nbsp; 👥 2 developers</div>
+              <div class="roadmap-step-desc">Immediately fix SQL injection via PreparedStatements, move credentials to environment variables/vault, implement bcrypt password hashing. These are P0 security fixes that can be done without restructuring the app.</div>
+            </div>
+          </div>
+          <div class="roadmap-step">
+            <div class="roadmap-step-num">2</div>
+            <div class="roadmap-step-content">
+              <div class="roadmap-step-title">Refactor Data Access Layer</div>
+              <div class="roadmap-step-meta">⏱️ 3 weeks &nbsp;|&nbsp; 💰 ₹2,25,000 &nbsp;|&nbsp; 👥 3 developers</div>
+              <div class="roadmap-step-desc">Replace raw JDBC with Spring Data JPA + HikariCP connection pooling. Introduce proper repository pattern. Fix N+1 queries with JOIN fetch queries. Add proper transaction management.</div>
+            </div>
+          </div>
+          <div class="roadmap-step">
+            <div class="roadmap-step-num">3</div>
+            <div class="roadmap-step-content">
+              <div class="roadmap-step-title">Migrate to Spring Boot 3</div>
+              <div class="roadmap-step-meta">⏱️ 4 weeks &nbsp;|&nbsp; 💰 ₹3,00,000 &nbsp;|&nbsp; 👥 3 developers</div>
+              <div class="roadmap-step-desc">Migrate from Servlet/Tomcat 7 to Spring Boot 3 + embedded Tomcat 10. Replace JSP views with REST APIs (for frontend separation). Add Spring Security for CSRF, session management, and auth.</div>
+            </div>
+          </div>
+          <div class="roadmap-step">
+            <div class="roadmap-step-num">4</div>
+            <div class="roadmap-step-content">
+              <div class="roadmap-step-title">Testing, Docs &amp; Deployment</div>
+              <div class="roadmap-step-meta">⏱️ 3 weeks &nbsp;|&nbsp; 💰 ₹1,75,000 &nbsp;|&nbsp; 👥 2 developers</div>
+              <div class="roadmap-step-desc">Write unit + integration tests (JUnit 5, Mockito, Testcontainers). Generate API documentation (OpenAPI/Swagger). Set up CI/CD pipeline (GitHub Actions). Deploy to AWS/Azure with containerization (Docker).</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="tab-cost" class="report-section">
+      <div class="report-card">
+        <div class="report-card-title">Cost &amp; Time Estimate</div>
+        <div class="cost-summary">
+          <div class="cost-card"><div class="cost-card-val">₹8,20,000</div><div class="cost-card-label">Total Estimate</div></div>
+          <div class="cost-card"><div class="cost-card-val">12 weeks</div><div class="cost-card-label">Timeline</div></div>
+          <div class="cost-card"><div class="cost-card-val">₹1,500/hr</div><div class="cost-card-label">Dev rate (Indian IT)</div></div>
+          <div class="cost-card"><div class="cost-card-val">3 devs</div><div class="cost-card-label">Recommended team size</div></div>
+        </div>
+        <div class="cost-breakdown" id="cost-breakdown">
+          <div class="cost-row"><div class="cost-row-label">Security Hardening (Phase 1)</div><div class="cost-row-val">₹1,20,000</div></div>
+          <div class="cost-row"><div class="cost-row-label">Data Layer Refactor (Phase 2)</div><div class="cost-row-val">₹2,25,000</div></div>
+          <div class="cost-row"><div class="cost-row-label">Spring Boot Migration (Phase 3)</div><div class="cost-row-val">₹3,00,000</div></div>
+          <div class="cost-row"><div class="cost-row-label">Testing &amp; Deployment (Phase 4)</div><div class="cost-row-val">₹1,75,000</div></div>
+          <div class="cost-row" style="padding-top:12px"><div class="cost-row-label" style="font-weight:700;color:var(--text)">Total (excl. GST)</div><div class="cost-row-val" style="font-size:1rem;font-weight:700;color:var(--accent2)">₹8,20,000</div></div>
+        </div>
+        <div style="margin-top:16px;padding:14px;background:rgba(124,111,255,0.08);border:1px solid rgba(124,111,255,0.2);border-radius:var(--radius-sm);font-size:0.8rem;color:var(--accent3)">
+          💡 Based on Indian IT market rates: Senior Dev ₹1,800/hr · Mid-level ₹1,200/hr · Blended ₹1,500/hr. Estimates assume 8 hr/day sprints.
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- UPGRADE MODAL -->
+<div id="upgrade-modal" class="modal-overlay hidden" onclick="hideModal(event)">
+  <div class="modal">
+    <div class="modal-icon">🚀</div>
+    <div class="modal-title">Upgrade to LegacyLens Pro</div>
+    <div class="modal-text">You've used your free analysis. Upgrade to Pro for unlimited repositories, all 4 languages (Java, .NET, COBOL, Python), and team collaboration.</div>
+    <div style="background:var(--bg3);border-radius:var(--radius-sm);padding:16px;margin-bottom:20px;text-align:left">
+      <div style="font-size:1.5rem;font-weight:700;color:var(--accent2)">₹15,000/month</div>
+      <div style="font-size:0.8rem;color:var(--text3)">+ 18% GST &nbsp;·&nbsp; 14-day free trial</div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-primary" onclick="showToast('Redirecting to payment gateway...')">Start Free Trial →</button>
+      <button class="btn btn-ghost" onclick="document.getElementById('upgrade-modal').classList.add('hidden')">Maybe later</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast" class="toast"></div>
+
+<script>
+let selectedLang = 'java';
+let apiKey = localStorage.getItem('ll_api_key') || '';
+let analysisResult = null;
+
+function showPage(p) {
+  document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
+  const pg = document.getElementById('page-' + p);
+  if (pg) pg.classList.add('active');
+  const uploadKey = document.getElementById('upload-api-key');
+  const settingsKey = document.getElementById('settings-api-key');
+  if (uploadKey) uploadKey.value = apiKey ? '••••••••' + apiKey.slice(-6) : '';
+  if (settingsKey) settingsKey.value = apiKey ? '••••••••' + apiKey.slice(-6) : '';
+}
+
+function switchDashTab(tab) {
+  ['overview','history','settings'].forEach(t => {
+    const el = document.getElementById('dash-' + t);
+    if (el) el.classList.toggle('hidden', t !== tab);
+  });
+  document.querySelectorAll('.sidebar-item').forEach((el, i) => {
+    el.classList.toggle('active', i === ['overview','upload','history',null,'settings','landing'].indexOf(tab));
+  });
+}
+
+function switchTab(tab) {
+  document.querySelectorAll('.report-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.report-tab').forEach(t => t.classList.remove('active'));
+  const section = document.getElementById('tab-' + tab);
+  if (section) section.classList.add('active');
+  const tabs = document.querySelectorAll('.report-tab');
+  const tabMap = {overview:0,files:1,risks:2,roadmap:3,cost:4};
+  if (tabs[tabMap[tab]]) tabs[tabMap[tab]].classList.add('active');
+}
+
+function selectLang(lang, el) {
+  selectedLang = lang;
+  document.querySelectorAll('.lang-chip').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function handleDrag(e) { e.preventDefault(); document.getElementById('drop-zone').classList.add('drag'); }
+function handleDrop(e) {
+  e.preventDefault();
+  document.getElementById('drop-zone').classList.remove('drag');
+  const file = e.dataTransfer.files[0];
+  if (file) readFile(file);
+}
+function handleFileSelect(e) { if (e.target.files[0]) readFile(e.target.files[0]); }
+
+function readFile(file) {
+  showToast('📦 File "' + file.name + '" loaded (' + (file.size/1024).toFixed(0) + 'KB)');
+  const reader = new FileReader();
+  reader.onload = e => { document.getElementById('code-input').value = '/* File: ' + file.name + ' */\n' + e.target.result.slice(0, 5000); };
+  reader.readAsText(file);
+}
+
+function handleGitUrl() {
+  const url = document.getElementById('git-url').value;
+  if (!url) { showToast('Please enter a GitHub URL'); return; }
+  showToast('🔗 Git URL noted. Paste code directly for demo — server fetch coming in full version!');
+}
+
+function saveApiKey() {
+  const inputEl = document.getElementById('upload-api-key') || document.getElementById('settings-api-key');
+  const val = inputEl ? inputEl.value : '';
+  if (val && !val.includes('•')) { apiKey = val; localStorage.setItem('ll_api_key', val); }
+  showToast('✅ API key saved!');
+}
+
+async function startAnalysis() {
+  const code = document.getElementById('code-input').value.trim();
+  if (!code) { showToast('⚠️ Please paste some code or upload a file first'); return; }
+  const key = apiKey || localStorage.getItem('ll_api_key');
+  if (!key || key.includes('•') || !key.startsWith('sk-')) {
+    const keyInput = document.getElementById('upload-api-key');
+    if (keyInput && keyInput.value && !keyInput.value.includes('•') && keyInput.value.startsWith('sk-')) {
+      apiKey = keyInput.value; localStorage.setItem('ll_api_key', apiKey);
+    } else {
+      showToast('⚠️ Enter your Anthropic API key first'); return;
+    }
+  }
+  document.getElementById('upload-form').classList.add('hidden');
+  document.getElementById('upload-progress').classList.remove('hidden');
+  await runAnalysis(code, key || apiKey);
+}
+
+function setProgress(pct, status, step) {
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-status').textContent = status;
+  ['parse','ai','report'].forEach((s, i) => {
+    const el = document.getElementById('step-' + s);
+    el.classList.remove('done','active');
+    if (i < step) el.classList.add('done');
+    else if (i === step) el.classList.add('active');
+  });
+}
+
+async function runAnalysis(code, key) {
+  try {
+    setProgress(10, 'Parsing code structure...', 0);
+    await sleep(600);
+    setProgress(30, 'Extracting metrics & AST snippets...', 0);
+    await sleep(500);
+    setProgress(50, 'Sending to Claude AI for analysis...', 1);
+
+    const prompt = `<legacy-analysis>
+Code:
+\`\`\`${selectedLang}
+${code.slice(0, 8000)}
+\`\`\`
+
+Language: ${selectedLang}
+Context: Indian IT modernization project. Dev rate: ₹1,500/hr.
+
+Analyze this legacy code and respond with ONLY a JSON object (no markdown, no backticks):
+{
+  "repoName": "detected name or 'legacy-codebase'",
+  "language": "${selectedLang}",
+  "loc": estimated_line_count,
+  "fileCount": estimated_file_count,
+  "explanation": "Plain English summary of what this code does (2-3 sentences)",
+  "techStack": ["tech1", "tech2"],
+  "files": [
+    {"name": "FileName.java", "purpose": "What it does", "loc": 0, "lang": "${selectedLang}"}
+  ],
+  "risks": [
+    {"issue": "Risk name", "file": "FileName.java:line", "severity": "high|med|low", "fix_cost_inr": 20000, "description": "What the risk is"}
+  ],
+  "roadmap": [
+    {"step": 1, "title": "Phase title", "time_weeks": 2, "cost_inr": 120000, "devs": 2, "description": "What to do"}
+  ],
+  "total_cost_inr": 820000,
+  "total_time_weeks": 12,
+  "dev_rate_inr": 1500
+}
+</legacy-analysis>`;
+
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-api-key': key, 'anthropic-version': '2023-06-01' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 2000,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+
+    if (!response.ok) {
+      const err = await response.json();
+      throw new Error(err.error?.message || 'API error ' + response.status);
+    }
+
+    const data = await response.json();
+    setProgress(80, 'Generating report...', 2);
+    await sleep(400);
+
+    const rawText = data.content[0].text;
+    let result;
+    try {
+      const clean = rawText.replace(/```json|```/g, '').trim();
+      result = JSON.parse(clean);
+    } catch(e) {
+      result = buildFallbackResult(code);
+    }
+
+    setProgress(100, 'Analysis complete! ✅', 2);
+    await sleep(600);
+    renderReport(result);
+    showPage('report-demo');
+
+  } catch(err) {
+    document.getElementById('upload-form').classList.remove('hidden');
+    document.getElementById('upload-progress').classList.add('hidden');
+    showToast('❌ Error: ' + err.message + '. Using demo report.');
+    showPage('report-demo');
+  }
+}
+
+function buildFallbackResult(code) {
+  const lines = code.split('\n').length;
+  return {
+    repoName: 'analyzed-codebase',
+    language: selectedLang,
+    loc: lines,
+    fileCount: 1,
+    explanation: 'This appears to be a ' + selectedLang + ' application. The code has been parsed but AI analysis was not available. The sample report below shows a typical legacy Java inventory system analysis for reference.',
+    techStack: [selectedLang === 'java' ? 'Java 8' : selectedLang, 'Legacy Framework'],
+    files: [{ name: 'Main.' + (selectedLang === 'dotnet' ? 'cs' : selectedLang === 'python' ? 'py' : 'java'), purpose: 'Main application file', loc: lines, lang: selectedLang }],
+    risks: [{ issue: 'Code Analysis Required', file: 'Main file', severity: 'med', fix_cost_inr: 50000, description: 'Full analysis requires valid Anthropic API key.' }],
+    roadmap: [{ step: 1, title: 'Setup AI Analysis', time_weeks: 1, cost_inr: 75000, devs: 1, description: 'Configure API key to get full migration roadmap.' }],
+    total_cost_inr: 500000,
+    total_time_weeks: 8,
+    dev_rate_inr: 1500
+  };
+}
+
+function renderReport(r) {
+  const fmtINR = n => '₹' + Number(n).toLocaleString('en-IN');
+
+  document.getElementById('report-title').textContent = r.repoName || 'analyzed-codebase';
+  document.getElementById('report-meta').innerHTML =
+    '<span class="report-meta-item">' + (r.language || selectedLang) + '</span>' +
+    '<span class="report-meta-item">📏 ' + (r.loc||0).toLocaleString() + ' LOC</span>' +
+    '<span class="report-meta-item">📁 ' + (r.fileCount||1) + ' files</span>' +
+    '<span class="report-meta-item">🗓️ Just analyzed</span>';
+
+  document.getElementById('overview-text').innerHTML =
+    '<p>' + (r.explanation || '') + '</p>' +
+    (r.techStack ? '<br><strong>Tech stack:</strong> ' + r.techStack.join(', ') : '');
+
+  if (r.files && r.files.length) {
+    const colors = {java:'var(--red)',python:'var(--blue)',dotnet:'var(--accent)',cobol:'var(--amber)'};
+    document.getElementById('files-list').innerHTML = r.files.map(f =>
+      '<div class="file-item"><div class="file-lang-dot" style="background:' + (colors[f.lang] || colors[selectedLang] || 'var(--accent)') + '"></div><div style="flex:1"><div class="file-name">' + f.name + '</div><div class="file-purpose">' + f.purpose + '</div></div><div class="file-loc">' + f.loc + ' LOC</div></div>'
+    ).join('');
+  }
+
+  if (r.risks && r.risks.length) {
+    document.getElementById('risk-table').querySelector('tbody').innerHTML = r.risks.map(risk =>
+      '<tr><td style="font-weight:500;color:var(--text)">' + risk.issue + '</td>' +
+      '<td style="color:var(--text3);font-size:0.8rem">' + (risk.file||'') + '</td>' +
+      '<td><span class="severity-badge severity-' + (risk.severity==='high'?'high':risk.severity==='med'?'med':'low') + '">' + risk.severity.toUpperCase() + '</span></td>' +
+      '<td style="color:var(--accent2)">' + fmtINR(risk.fix_cost_inr) + '</td>' +
+      '<td style="color:var(--text2);font-size:0.8rem">' + (risk.description||'') + '</td></tr>'
+    ).join('');
+  }
+
+  if (r.roadmap && r.roadmap.length) {
+    document.getElementById('roadmap-steps').innerHTML = r.roadmap.map(s =>
+      '<div class="roadmap-step"><div class="roadmap-step-num">' + s.step + '</div><div class="roadmap-step-content">' +
+      '<div class="roadmap-step-title">' + s.title + '</div>' +
+      '<div class="roadmap-step-meta">⏱️ ' + s.time_weeks + ' weeks &nbsp;|&nbsp; 💰 ' + fmtINR(s.cost_inr) + ' &nbsp;|&nbsp; 👥 ' + (s.devs||2) + ' developers</div>' +
+      '<div class="roadmap-step-desc">' + s.description + '</div></div></div>'
+    ).join('');
+  }
+
+  const totalCost = r.total_cost_inr || 0;
+  const totalWeeks = r.total_time_weeks || 0;
+  document.getElementById('cost-breakdown').innerHTML =
+    (r.roadmap || []).map(s =>
+      '<div class="cost-row"><div class="cost-row-label">Phase ' + s.step + ': ' + s.title + '</div><div class="cost-row-val">' + fmtINR(s.cost_inr) + '</div></div>'
+    ).join('') +
+    '<div class="cost-row" style="padding-top:12px"><div class="cost-row-label" style="font-weight:700;color:var(--text)">Total (excl. GST)</div><div class="cost-row-val" style="font-size:1rem;font-weight:700;color:var(--accent2)">' + fmtINR(totalCost) + '</div></div>';
+
+  const costSumEl = document.querySelector('#tab-cost .cost-summary');
+  if (costSumEl) costSumEl.innerHTML =
+    '<div class="cost-card"><div class="cost-card-val">' + fmtINR(totalCost) + '</div><div class="cost-card-label">Total Estimate</div></div>' +
+    '<div class="cost-card"><div class="cost-card-val">' + totalWeeks + ' weeks</div><div class="cost-card-label">Timeline</div></div>' +
+    '<div class="cost-card"><div class="cost-card-val">₹1,500/hr</div><div class="cost-card-label">Dev rate (Indian IT)</div></div>' +
+    '<div class="cost-card"><div class="cost-card-val">3 devs</div><div class="cost-card-label">Recommended team</div></div>';
+}
+
+function showUpgrade() { document.getElementById('upgrade-modal').classList.remove('hidden'); }
+function hideModal(e) { if (e.target.id === 'upgrade-modal') document.getElementById('upgrade-modal').classList.add('hidden'); }
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3500);
+}
+
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+const uploadApiKey = document.getElementById('upload-api-key');
+if (uploadApiKey && apiKey) uploadApiKey.value = '••••••••' + apiKey.slice(-6);
+</script>
+</body>
+</html>
