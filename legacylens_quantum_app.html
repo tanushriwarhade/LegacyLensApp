@@ -1,0 +1,1374 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --void: #020408;
+  --deep: #060d18;
+  --surface: #0a1628;
+  --panel: #0e1e35;
+  --border: rgba(41,171,255,0.15);
+  --accent: #29abff;
+  --accent2: #00ffc8;
+  --accent3: #ff6b35;
+  --gold: #ffd166;
+  --text: #e8f4ff;
+  --muted: rgba(232,244,255,0.5);
+  --danger: #ff4757;
+  --warn: #ffd166;
+  --font: 'Syne', sans-serif;
+  --mono: 'IBM Plex Mono', monospace;
+}
+
+body {
+  background: var(--void);
+  color: var(--text);
+  font-family: var(--font);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* NAV */
+nav {
+  position: sticky; top: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 32px;
+  background: rgba(2,4,8,0.92);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
+.logo {
+  font-size: 18px; font-weight: 800; letter-spacing: -0.5px;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.logo span { color: var(--accent3); -webkit-text-fill-color: var(--accent3); }
+.nav-tabs { display: flex; gap: 4px; }
+.nav-tab {
+  padding: 7px 16px; font-size: 13px; font-family: var(--font);
+  background: transparent; border: 1px solid transparent;
+  color: var(--muted); border-radius: 8px; cursor: pointer;
+  transition: all 0.2s; font-weight: 700; letter-spacing: 0.3px;
+}
+.nav-tab:hover { color: var(--text); border-color: var(--border); }
+.nav-tab.active { color: var(--accent); border-color: var(--accent); background: rgba(41,171,255,0.08); }
+.nav-cta {
+  padding: 8px 20px; font-size: 13px; font-weight: 700; font-family: var(--font);
+  background: linear-gradient(135deg, var(--accent), #006dcc);
+  border: none; border-radius: 8px; color: #fff; cursor: pointer;
+  letter-spacing: 0.3px; transition: transform 0.15s, opacity 0.15s;
+}
+.nav-cta:hover { transform: translateY(-1px); opacity: 0.9; }
+
+/* PAGES */
+.page { display: none; animation: fadeIn 0.3s ease; }
+.page.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ==================== LANDING PAGE ==================== */
+.hero {
+  min-height: 85vh;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 60px 32px 40px; text-align: center; position: relative; overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(41,171,255,0.12) 0%, transparent 70%),
+              radial-gradient(ellipse 60% 40% at 80% 100%, rgba(0,255,200,0.06) 0%, transparent 60%);
+}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 6px 16px; border: 1px solid rgba(0,255,200,0.3);
+  border-radius: 100px; font-size: 12px; color: var(--accent2); margin-bottom: 28px;
+  background: rgba(0,255,200,0.05); font-family: var(--mono);
+}
+.badge-dot { width: 7px; height: 7px; background: var(--accent2); border-radius: 50%; animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.85)} }
+
+.hero h1 {
+  font-size: clamp(36px, 6vw, 72px); font-weight: 800; line-height: 1.05;
+  letter-spacing: -2px; margin-bottom: 20px; max-width: 900px; position: relative;
+}
+.hero h1 .grad {
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 50%, var(--accent) 100%);
+  background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  animation: shine 4s linear infinite;
+}
+@keyframes shine { to { background-position: 200% center; } }
+
+.hero-sub { font-size: 18px; color: var(--muted); max-width: 560px; line-height: 1.7; margin-bottom: 36px; position: relative; }
+
+.hero-actions { display: flex; gap: 12px; margin-bottom: 60px; position: relative; flex-wrap: wrap; justify-content: center; }
+.btn-primary {
+  padding: 14px 32px; font-size: 15px; font-weight: 700; font-family: var(--font);
+  background: linear-gradient(135deg, var(--accent), #006dcc);
+  border: none; border-radius: 10px; color: #fff; cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s; letter-spacing: 0.3px;
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(41,171,255,0.3); }
+.btn-outline {
+  padding: 14px 32px; font-size: 15px; font-weight: 700; font-family: var(--font);
+  background: transparent; border: 1px solid var(--border);
+  border-radius: 10px; color: var(--text); cursor: pointer; transition: all 0.2s;
+}
+.btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+
+/* STATS BAR */
+.stats-bar {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px;
+  background: var(--border); border: 1px solid var(--border); border-radius: 16px;
+  overflow: hidden; max-width: 860px; width: 100%; position: relative; margin-bottom: 60px;
+}
+.stat-item {
+  background: var(--panel); padding: 20px 24px; text-align: left;
+}
+.stat-num { font-size: 28px; font-weight: 800; color: var(--accent); letter-spacing: -1px; }
+.stat-label { font-size: 12px; color: var(--muted); margin-top: 4px; font-family: var(--mono); }
+
+/* FEATURES GRID */
+.section { padding: 60px 32px; max-width: 1100px; margin: 0 auto; }
+.section-label { font-size: 11px; letter-spacing: 3px; color: var(--accent2); font-family: var(--mono); margin-bottom: 12px; }
+.section-title { font-size: 36px; font-weight: 800; letter-spacing: -1px; margin-bottom: 40px; }
+
+.features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+.feature-card {
+  background: var(--panel); border: 1px solid var(--border); border-radius: 16px;
+  padding: 24px; transition: border-color 0.2s, transform 0.2s; cursor: pointer;
+}
+.feature-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+.feature-icon { font-size: 28px; margin-bottom: 14px; }
+.feature-title { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+.feature-desc { font-size: 13px; color: var(--muted); line-height: 1.6; font-family: var(--mono); }
+
+/* AGENT SWARM */
+.agents-row { display: flex; gap: 12px; flex-wrap: wrap; margin: 24px 0; }
+.agent-bubble {
+  padding: 10px 18px; border-radius: 100px; font-size: 13px; font-weight: 700; font-family: var(--mono);
+  display: flex; align-items: center; gap: 8px; border: 1px solid;
+  animation: agentPulse 3s ease-in-out infinite;
+}
+.agent-bubble:nth-child(2) { animation-delay: 0.5s; }
+.agent-bubble:nth-child(3) { animation-delay: 1s; }
+.agent-bubble:nth-child(4) { animation-delay: 1.5s; }
+.agent-bubble:nth-child(5) { animation-delay: 2s; }
+.agent-bubble:nth-child(6) { animation-delay: 2.5s; }
+.agent-bubble:nth-child(7) { animation-delay: 0.2s; }
+@keyframes agentPulse { 0%,100%{opacity:0.7} 50%{opacity:1} }
+.agent-green { background: rgba(0,255,200,0.08); border-color: rgba(0,255,200,0.3); color: var(--accent2); }
+.agent-blue { background: rgba(41,171,255,0.08); border-color: rgba(41,171,255,0.3); color: var(--accent); }
+.agent-orange { background: rgba(255,107,53,0.08); border-color: rgba(255,107,53,0.3); color: var(--accent3); }
+.agent-dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+
+/* PRICING */
+.pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.price-card {
+  background: var(--panel); border: 1px solid var(--border); border-radius: 16px;
+  padding: 28px 24px; position: relative;
+}
+.price-card.featured { border-color: var(--accent); background: rgba(41,171,255,0.05); }
+.price-card.featured::before {
+  content: '⭐ MOST POPULAR';
+  position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+  background: var(--accent); color: #000; font-size: 10px; font-weight: 700;
+  padding: 4px 12px; border-radius: 100px; letter-spacing: 1px; white-space: nowrap;
+}
+.price-tier { font-size: 13px; font-family: var(--mono); color: var(--muted); margin-bottom: 8px; }
+.price-amount { font-size: 34px; font-weight: 800; letter-spacing: -1px; margin-bottom: 4px; }
+.price-amount span { font-size: 14px; color: var(--muted); font-weight: 400; }
+.price-features { list-style: none; margin: 20px 0; display: flex; flex-direction: column; gap: 10px; }
+.price-features li { font-size: 13px; color: var(--muted); display: flex; align-items: center; gap: 8px; font-family: var(--mono); }
+.price-features li::before { content: '→'; color: var(--accent2); font-weight: 700; }
+.price-btn {
+  width: 100%; padding: 12px; font-size: 14px; font-weight: 700; font-family: var(--font);
+  border-radius: 10px; cursor: pointer; transition: all 0.2s;
+}
+.price-btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
+.price-btn-solid { background: var(--accent); border: 1px solid var(--accent); color: #000; }
+.price-btn:hover { opacity: 0.8; transform: translateY(-1px); }
+
+/* WAITLIST */
+.waitlist-form { display: flex; gap: 12px; max-width: 480px; margin: 0 auto; }
+.waitlist-input {
+  flex: 1; padding: 13px 18px; font-size: 14px; font-family: var(--font);
+  background: var(--panel); border: 1px solid var(--border); border-radius: 10px;
+  color: var(--text); outline: none; transition: border-color 0.2s;
+}
+.waitlist-input:focus { border-color: var(--accent); }
+.waitlist-count { font-size: 13px; color: var(--muted); text-align: center; margin-top: 12px; font-family: var(--mono); }
+
+/* ==================== DASHBOARD ==================== */
+.dashboard { padding: 24px 32px; }
+.dash-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+.dash-title { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
+.dash-subtitle { font-size: 13px; color: var(--muted); font-family: var(--mono); }
+.status-bar { display: flex; gap: 8px; }
+.status-pill { padding: 6px 14px; border-radius: 100px; font-size: 12px; font-family: var(--mono); display: flex; align-items: center; gap: 6px; }
+.status-live { background: rgba(0,255,200,0.12); color: var(--accent2); border: 1px solid rgba(0,255,200,0.25); }
+.status-time { background: rgba(41,171,255,0.12); color: var(--accent); border: 1px solid rgba(41,171,255,0.2); }
+
+.metrics-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+.metric-card {
+  background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 20px;
+}
+.metric-label { font-size: 11px; color: var(--muted); font-family: var(--mono); letter-spacing: 1px; margin-bottom: 8px; }
+.metric-value { font-size: 28px; font-weight: 800; letter-spacing: -1px; }
+.metric-delta { font-size: 12px; font-family: var(--mono); margin-top: 4px; }
+.delta-up { color: var(--accent2); }
+.delta-down { color: var(--danger); }
+
+.dash-grid { display: grid; grid-template-columns: 1fr 340px; gap: 16px; }
+
+/* REPO BOARD */
+.board { background: var(--panel); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; }
+.board-header { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+.board-title { font-size: 14px; font-weight: 700; }
+.board-cols { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; }
+.board-col { padding: 16px 14px; border-right: 1px solid var(--border); }
+.board-col:last-child { border-right: none; }
+.col-label { font-size: 11px; color: var(--muted); font-family: var(--mono); letter-spacing: 1px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; }
+.col-count { background: rgba(41,171,255,0.15); color: var(--accent); font-size: 11px; padding: 2px 7px; border-radius: 100px; }
+.repo-card {
+  background: var(--deep); border: 1px solid var(--border); border-radius: 10px;
+  padding: 12px; margin-bottom: 8px; cursor: grab; transition: transform 0.15s, border-color 0.15s;
+}
+.repo-card:hover { transform: translateY(-1px); border-color: var(--accent); }
+.repo-name { font-size: 13px; font-weight: 700; margin-bottom: 4px; font-family: var(--mono); }
+.repo-lang { font-size: 11px; color: var(--muted); }
+.repo-bar { height: 3px; background: var(--border); border-radius: 2px; margin-top: 8px; overflow: hidden; }
+.repo-progress { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 2px; }
+
+/* AGENT STATUS */
+.agent-status { background: var(--panel); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; }
+.agent-status-header { padding: 16px 20px; border-bottom: 1px solid var(--border); }
+.agent-row { display: flex; align-items: center; gap: 12px; padding: 14px 20px; border-bottom: 1px solid var(--border); }
+.agent-row:last-child { border-bottom: none; }
+.agent-indicator { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.ind-green { background: var(--accent2); box-shadow: 0 0 8px var(--accent2); }
+.ind-yellow { background: var(--warn); box-shadow: 0 0 8px var(--warn); }
+.ind-red { background: var(--danger); box-shadow: 0 0 8px var(--danger); }
+.ind-gray { background: var(--muted); }
+.agent-name { font-size: 13px; font-weight: 700; font-family: var(--mono); flex: 1; }
+.agent-task { font-size: 11px; color: var(--muted); }
+.agent-pct { font-size: 12px; font-family: var(--mono); color: var(--accent); }
+
+/* MINI CHART */
+.mini-chart { display: flex; align-items: flex-end; gap: 3px; height: 40px; }
+.chart-bar { flex: 1; background: var(--accent); border-radius: 2px 2px 0 0; opacity: 0.7; }
+
+/* ==================== UPLOAD PAGE ==================== */
+.upload-page { padding: 40px 32px; max-width: 900px; margin: 0 auto; }
+.upload-zone {
+  border: 2px dashed var(--border); border-radius: 20px; padding: 60px 40px;
+  text-align: center; cursor: pointer; transition: all 0.3s; margin-bottom: 32px;
+  background: var(--panel);
+  position: relative;
+}
+.upload-zone:hover, .upload-zone.drag-over { border-color: var(--accent); background: rgba(41,171,255,0.05); }
+.upload-icon { font-size: 48px; margin-bottom: 16px; }
+.upload-title { font-size: 20px; font-weight: 800; margin-bottom: 8px; }
+.upload-sub { font-size: 13px; color: var(--muted); font-family: var(--mono); }
+
+.sample-zips { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 32px; }
+.zip-card {
+  background: var(--panel); border: 1px solid var(--border); border-radius: 12px;
+  padding: 16px 14px; cursor: pointer; transition: all 0.2s; text-align: center;
+}
+.zip-card:hover { border-color: var(--accent2); transform: translateY(-2px); }
+.zip-icon { font-size: 24px; margin-bottom: 8px; }
+.zip-name { font-size: 12px; font-weight: 700; font-family: var(--mono); margin-bottom: 4px; }
+.zip-meta { font-size: 11px; color: var(--muted); }
+
+/* ANALYSIS PROGRESS */
+.analysis-panel { background: var(--panel); border: 1px solid var(--border); border-radius: 16px; padding: 24px; }
+.analysis-title { font-size: 16px; font-weight: 700; margin-bottom: 20px; }
+.progress-steps { display: flex; flex-direction: column; gap: 16px; }
+.progress-step { display: flex; align-items: center; gap: 16px; }
+.step-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+.step-done { background: rgba(0,255,200,0.15); border: 1px solid rgba(0,255,200,0.3); }
+.step-active { background: rgba(41,171,255,0.15); border: 1px solid rgba(41,171,255,0.3); }
+.step-pending { background: var(--deep); border: 1px solid var(--border); }
+.step-info { flex: 1; }
+.step-label { font-size: 13px; font-weight: 700; font-family: var(--mono); }
+.step-detail { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.step-bar { height: 4px; background: var(--border); border-radius: 2px; margin-top: 8px; overflow: hidden; }
+.step-fill { height: 100%; border-radius: 2px; background: linear-gradient(90deg, var(--accent), var(--accent2)); transition: width 1s ease; }
+
+/* ==================== REPORT PAGE ==================== */
+.report-page { padding: 24px 32px; }
+.report-nav { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
+.report-tab { padding: 8px 18px; border-radius: 8px; font-size: 13px; font-weight: 700; font-family: var(--mono); cursor: pointer; background: var(--panel); border: 1px solid var(--border); color: var(--muted); transition: all 0.2s; }
+.report-tab.active { color: var(--accent); border-color: var(--accent); background: rgba(41,171,255,0.08); }
+
+.report-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.report-card { background: var(--panel); border: 1px solid var(--border); border-radius: 16px; padding: 24px; }
+.report-card-title { font-size: 14px; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+
+/* AGENT CHAT */
+.agent-chat { display: flex; flex-direction: column; gap: 12px; }
+.chat-msg { display: flex; gap: 12px; align-items: flex-start; }
+.chat-avatar { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; font-family: var(--mono); font-weight: 700; font-size: 10px; }
+.av-planner { background: rgba(41,171,255,0.2); color: var(--accent); }
+.av-refactor { background: rgba(0,255,200,0.2); color: var(--accent2); }
+.av-tester { background: rgba(255,209,102,0.2); color: var(--gold); }
+.av-deployer { background: rgba(255,71,87,0.2); color: var(--danger); }
+.chat-content { flex: 1; }
+.chat-agent-name { font-size: 11px; color: var(--muted); font-family: var(--mono); margin-bottom: 4px; }
+.chat-bubble { background: var(--deep); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; font-size: 13px; line-height: 1.6; font-family: var(--mono); }
+.chat-bubble .highlight { color: var(--accent2); font-weight: 700; }
+.chat-bubble .warn-text { color: var(--warn); }
+.chat-bubble .ok-text { color: var(--accent2); }
+
+/* ROADMAP */
+.roadmap { display: flex; flex-direction: column; gap: 12px; }
+.road-item { display: flex; gap: 16px; align-items: center; background: var(--deep); border: 1px solid var(--border); border-radius: 12px; padding: 16px; transition: border-color 0.2s; cursor: pointer; }
+.road-item:hover { border-color: var(--accent); }
+.road-badge { padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 700; font-family: var(--mono); text-align: center; min-width: 80px; }
+.badge-star { background: rgba(255,209,102,0.15); color: var(--gold); border: 1px solid rgba(255,209,102,0.3); }
+.badge-good { background: rgba(41,171,255,0.1); color: var(--accent); border: 1px solid var(--border); }
+.badge-ok { background: rgba(41,171,255,0.05); color: var(--muted); border: 1px solid var(--border); }
+.road-info { flex: 1; }
+.road-name { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+.road-meta { font-size: 12px; color: var(--muted); font-family: var(--mono); }
+.road-right { text-align: right; }
+.road-roi { font-size: 18px; font-weight: 800; color: var(--accent2); letter-spacing: -0.5px; }
+.road-cost { font-size: 12px; color: var(--muted); font-family: var(--mono); }
+.confidence-bar { width: 80px; height: 4px; background: var(--border); border-radius: 2px; margin-top: 6px; overflow: hidden; }
+.conf-fill { height: 100%; border-radius: 2px; }
+
+/* CODE DIFF */
+.code-diff { font-family: var(--mono); font-size: 11px; border-radius: 10px; overflow: hidden; }
+.diff-header { display: grid; grid-template-columns: 1fr 1fr; }
+.diff-label { padding: 8px 12px; font-size: 11px; font-weight: 700; }
+.diff-before { background: rgba(255,71,87,0.15); color: var(--danger); }
+.diff-after { background: rgba(0,255,200,0.12); color: var(--accent2); }
+.diff-body { display: grid; grid-template-columns: 1fr 1fr; }
+.diff-col { padding: 12px; overflow-x: auto; }
+.diff-before-bg { background: rgba(255,71,87,0.05); border: 1px solid rgba(255,71,87,0.15); border-radius: 0 0 0 8px; }
+.diff-after-bg { background: rgba(0,255,200,0.04); border: 1px solid rgba(0,255,200,0.12); border-radius: 0 0 8px 0; }
+.code-line { line-height: 1.8; white-space: nowrap; color: var(--muted); }
+.code-line .kw { color: var(--accent); }
+.code-line .str { color: var(--gold); }
+.code-line .ann { color: var(--accent2); }
+.code-line .cls { color: var(--accent3); }
+.code-line .cmt { color: rgba(232,244,255,0.3); }
+
+/* DIGITAL TWIN */
+.twin-metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+.twin-metric { background: var(--deep); border: 1px solid var(--border); border-radius: 10px; padding: 14px; text-align: center; }
+.twin-num { font-size: 24px; font-weight: 800; letter-spacing: -1px; }
+.twin-label { font-size: 11px; color: var(--muted); font-family: var(--mono); margin-top: 4px; }
+.twin-old { color: var(--danger); }
+.twin-new { color: var(--accent2); }
+
+/* GALAXY VIZ */
+.galaxy-container { height: 200px; position: relative; overflow: hidden; border-radius: 12px; background: var(--deep); border: 1px solid var(--border); }
+.galaxy-svg { width: 100%; height: 100%; }
+.planet { cursor: pointer; }
+.planet circle { transition: r 0.2s; }
+.planet:hover circle { r: 22; }
+
+/* PERF BARS */
+.perf-bars { display: flex; flex-direction: column; gap: 10px; }
+.perf-row { display: flex; align-items: center; gap: 12px; }
+.perf-label { font-size: 12px; font-family: var(--mono); width: 90px; flex-shrink: 0; }
+.perf-track { flex: 1; height: 8px; background: var(--deep); border-radius: 4px; overflow: hidden; }
+.perf-fill { height: 100%; border-radius: 4px; }
+.perf-val { font-size: 12px; font-family: var(--mono); width: 50px; text-align: right; }
+
+/* ==================== ENTERPRISE PAGE ==================== */
+.enterprise-page { padding: 40px 32px; max-width: 1100px; margin: 0 auto; }
+.ent-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+.ent-card { background: var(--panel); border: 1px solid var(--border); border-radius: 16px; padding: 24px; }
+.ent-title { font-size: 14px; font-weight: 700; margin-bottom: 16px; color: var(--accent); }
+.team-list { display: flex; flex-direction: column; gap: 12px; }
+.team-member { display: flex; align-items: center; gap: 12px; }
+.team-avatar { width: 36px; height: 36px; border-radius: 10px; background: linear-gradient(135deg, var(--accent), var(--accent2)); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #000; flex-shrink: 0; }
+.team-info { flex: 1; }
+.team-name { font-size: 13px; font-weight: 700; }
+.team-role { font-size: 12px; color: var(--muted); font-family: var(--mono); }
+.team-status { font-size: 11px; padding: 3px 8px; border-radius: 100px; }
+.ts-active { background: rgba(0,255,200,0.12); color: var(--accent2); }
+.ts-idle { background: rgba(41,171,255,0.08); color: var(--accent); }
+
+.compliance-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.compliance-item { background: var(--deep); border: 1px solid var(--border); border-radius: 10px; padding: 12px; display: flex; align-items: center; gap: 10px; }
+.comp-icon { font-size: 18px; }
+.comp-name { font-size: 13px; font-weight: 700; font-family: var(--mono); }
+.comp-status { font-size: 11px; color: var(--accent2); }
+
+.pipeline-list { display: flex; flex-direction: column; gap: 10px; }
+.pipeline-item { background: var(--deep); border: 1px solid var(--border); border-radius: 10px; padding: 14px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: border-color 0.2s; }
+.pipeline-item:hover { border-color: var(--accent); }
+.pipeline-dot { width: 10px; height: 10px; border-radius: 50%; }
+.pipeline-info { flex: 1; }
+.pipeline-name { font-size: 13px; font-weight: 700; font-family: var(--mono); }
+.pipeline-time { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.pipeline-action { font-size: 12px; color: var(--accent); font-family: var(--mono); }
+
+.ml-accuracy-bars { display: flex; flex-direction: column; gap: 10px; }
+.acc-row { display: flex; align-items: center; gap: 10px; }
+.acc-label { font-size: 12px; font-family: var(--mono); width: 110px; }
+.acc-track { flex: 1; height: 8px; background: var(--deep); border-radius: 4px; overflow: hidden; }
+.acc-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--accent), var(--accent2)); }
+.acc-val { font-size: 12px; font-family: var(--mono); color: var(--accent); }
+
+/* FOOTER STRIP */
+.footer { padding: 32px; text-align: center; border-top: 1px solid var(--border); margin-top: 60px; }
+.footer-text { font-size: 13px; color: var(--muted); font-family: var(--mono); line-height: 1.8; }
+.footer-mark { color: var(--accent2); }
+
+/* ANIMATIONS */
+@keyframes spin { to { transform: rotate(360deg); } }
+.spinning { animation: spin 8s linear infinite; }
+@keyframes orbit { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">Legacy<span>Lens</span> <span style="color:var(--accent);-webkit-text-fill-color:var(--accent)">Quantum</span></div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="showPage('landing')">Platform</button>
+    <button class="nav-tab" onclick="showPage('dashboard')">Dashboard</button>
+    <button class="nav-tab" onclick="showPage('upload')">Analyze</button>
+    <button class="nav-tab" onclick="showPage('report')">Report</button>
+    <button class="nav-tab" onclick="showPage('enterprise')">Enterprise</button>
+  </div>
+  <button class="nav-cta" onclick="showPage('upload')">Start Free →</button>
+</nav>
+
+<!-- ==================== LANDING PAGE ==================== -->
+<div id="page-landing" class="page active">
+  <div class="hero">
+    <div class="hero-badge">
+      <span class="badge-dot"></span>
+      QUANTUM MIGRATION ENGINE v2.6 — PATENT PENDING
+    </div>
+    <h1>Your Legacy Code's<br><span class="grad">Digital Resurrection</span></h1>
+    <p class="hero-sub">7 AI agents analyze, twin, and autonomously migrate your COBOL, J2EE, VB6 & ABAP systems. Tested on 247 Pune projects. 94% accuracy. ₹12.4L average savings.</p>
+    <div class="hero-actions">
+      <button class="btn-primary" onclick="showPage('upload')">Upload Legacy Code →</button>
+      <button class="btn-outline" onclick="showPage('report')">See Sample Report</button>
+    </div>
+
+    <div class="stats-bar">
+      <div class="stat-item">
+        <div class="stat-num">₹50K Cr</div>
+        <div class="stat-label">MARKET_OPPORTUNITY_INDIA</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">94%</div>
+        <div class="stat-label">MIGRATION_ACCURACY_RATE</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">127</div>
+        <div class="stat-label">PUNE_TEAMS_ON_WAITLIST</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">18wks</div>
+        <div class="stat-label">AVG_COBOL_TO_K8S</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">THE QUANTUM ENGINE</div>
+    <div class="section-title">7 AI Agents. One Mission.</div>
+
+    <div class="agents-row">
+      <div class="agent-bubble agent-green"><span class="agent-dot"></span>🧠 Archaeologist</div>
+      <div class="agent-bubble agent-blue"><span class="agent-dot"></span>🏗 Architect</div>
+      <div class="agent-bubble agent-green"><span class="agent-dot"></span>🗺 Quantum Planner</div>
+      <div class="agent-bubble agent-orange"><span class="agent-dot"></span>🔬 Code Surgeon</div>
+      <div class="agent-bubble agent-blue"><span class="agent-dot"></span>🧪 Validator</div>
+      <div class="agent-bubble agent-green"><span class="agent-dot"></span>🚀 Deployer</div>
+      <div class="agent-bubble agent-orange"><span class="agent-dot"></span>🧬 Optimizer</div>
+    </div>
+
+    <div class="features-grid" style="margin-top:32px">
+      <div class="feature-card" onclick="showPage('upload')">
+        <div class="feature-icon">🔍</div>
+        <div class="feature-title">Deep Archaeology</div>
+        <div class="feature-desc">Tree-sitter parses 23 legacy languages with 100+ AI patterns. Understands what your COBOL REALLY does.</div>
+      </div>
+      <div class="feature-card" onclick="showPage('report')">
+        <div class="feature-icon">🌐</div>
+        <div class="feature-title">Digital Twin Simulator</div>
+        <div class="feature-desc">Runs your legacy logic in a WebAssembly sandbox. Legacy vs Modern—pixel-perfect output match at 98%.</div>
+      </div>
+      <div class="feature-card" onclick="showPage('report')">
+        <div class="feature-icon">⚡</div>
+        <div class="feature-title">Quantum Roadmap</div>
+        <div class="feature-desc">Monte Carlo simulations across 10,000 paths. ML-ranked migration strategies with ROI, cost, and risk.</div>
+      </div>
+      <div class="feature-card" onclick="showPage('report')">
+        <div class="feature-icon">🤖</div>
+        <div class="feature-title">Autonomous Migration</div>
+        <div class="feature-desc">Code Surgeon agent generates 70% of your migration automatically. Spring Boot, JPA, microservices ready.</div>
+      </div>
+      <div class="feature-card" onclick="showPage('enterprise')">
+        <div class="feature-icon">🛡</div>
+        <div class="feature-title">Enterprise War Room</div>
+        <div class="feature-desc">50-user teams, SOC2/GDPR audit trails, CI/CD integration, one-click Docker + Helm + Terraform deploy.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🧬</div>
+        <div class="feature-title">Self-Healing ML</div>
+        <div class="feature-desc">Analyzes past migration outcomes vs predictions. Tunes agent weights. Improves 2.4% accuracy monthly.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRICING -->
+  <div class="section">
+    <div class="section-label">PRICING</div>
+    <div class="section-title">Built for Indian IT Scale</div>
+    <div class="pricing-grid">
+      <div class="price-card">
+        <div class="price-tier">FREE TIER</div>
+        <div class="price-amount">₹0 <span>/ forever</span></div>
+        <ul class="price-features">
+          <li>3 repos / month</li>
+          <li>5,000 LOC analysis</li>
+          <li>2 agents active</li>
+          <li>Basic roadmap PDF</li>
+          <li>Community support</li>
+        </ul>
+        <button class="price-btn price-btn-outline" onclick="showPage('upload')">Start Free</button>
+      </div>
+      <div class="price-card featured">
+        <div class="price-tier">TEAM</div>
+        <div class="price-amount">₹25K <span>/ month</span></div>
+        <ul class="price-features">
+          <li>Unlimited repos</li>
+          <li>Full 7-agent swarm</li>
+          <li>Digital Twin simulator</li>
+          <li>Quantum roadmap ML</li>
+          <li>10-user war room</li>
+        </ul>
+        <button class="price-btn price-btn-solid" onclick="showPage('upload')">Start Trial →</button>
+      </div>
+      <div class="price-card">
+        <div class="price-tier">QUANTUM ENTERPRISE</div>
+        <div class="price-amount">₹99K <span>/ month</span></div>
+        <ul class="price-features">
+          <li>50-user war room</li>
+          <li>SOC2 / GDPR compliance</li>
+          <li>On-prem deployment</li>
+          <li>Dedicated success agent</li>
+          <li>TCS/Infosys SLA ready</li>
+        </ul>
+        <button class="price-btn price-btn-outline" onclick="showPage('enterprise')">Contact Sales</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- WAITLIST -->
+  <div class="section" style="text-align:center">
+    <div class="section-label">EARLY ACCESS</div>
+    <div class="section-title">Join 127 Pune IT Teams</div>
+    <p style="color:var(--muted);margin-bottom:24px;font-family:var(--mono);font-size:14px">"From COBOL to Kubernetes in 18 weeks — TCS migration team approved"</p>
+    <div class="waitlist-form">
+      <input class="waitlist-input" type="email" placeholder="your@company.com" id="waitlist-email">
+      <button class="btn-primary" onclick="joinWaitlist()">Join Waitlist →</button>
+    </div>
+    <div class="waitlist-count" id="waitlist-msg">🟢 127 teams already on waitlist · Next cohort: June 2026</div>
+  </div>
+
+  <div class="footer">
+    <div class="footer-text">
+      <span class="footer-mark">LegacyLens Quantum</span> · Patent-pending Quantum Migration Engine<br>
+      Tested with 247 Pune projects · ₹12.4L average savings per engagement<br>
+      Made for Indian IT · Pune / Mumbai / Bengaluru · © 2026
+    </div>
+  </div>
+</div>
+
+<!-- ==================== DASHBOARD ==================== -->
+<div id="page-dashboard" class="page">
+  <div class="dashboard">
+    <div class="dash-header">
+      <div>
+        <div class="dash-title">Mission Control</div>
+        <div class="dash-subtitle">47 active repos · 3 agents running · Last sync 2m ago</div>
+      </div>
+      <div class="status-bar">
+        <div class="status-pill status-live"><span style="width:7px;height:7px;border-radius:50%;background:var(--accent2);display:inline-block"></span> LIVE</div>
+        <div class="status-pill status-time">FY26 Q1</div>
+      </div>
+    </div>
+
+    <div class="metrics-row">
+      <div class="metric-card">
+        <div class="metric-label">PREDICTED SAVINGS</div>
+        <div class="metric-value" style="color:var(--accent2)">₹2.4Cr</div>
+        <div class="metric-delta delta-up">↑ ₹18L this month</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">REPOS ACTIVE</div>
+        <div class="metric-value" style="color:var(--accent)">47</div>
+        <div class="metric-delta delta-up">↑ 6 new this week</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">ML ACCURACY</div>
+        <div class="metric-value" style="color:var(--gold)">94.2%</div>
+        <div class="metric-delta delta-up">↑ 2.4% MoM</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">AVG ROI</div>
+        <div class="metric-value" style="color:var(--accent3)">3.1x</div>
+        <div class="metric-delta delta-up">↑ 0.3x QoQ</div>
+      </div>
+    </div>
+
+    <div class="dash-grid">
+      <div class="board">
+        <div class="board-header">
+          <div class="board-title">Migration Pipeline</div>
+          <div style="font-size:12px;color:var(--muted);font-family:var(--mono)">Drag repos between stages</div>
+        </div>
+        <div class="board-cols">
+          <div class="board-col">
+            <div class="col-label">ASSESSMENT <span class="col-count">12</span></div>
+            <div class="repo-card"><div class="repo-name">BankCore.jar</div><div class="repo-lang">Java EE · 84K LOC</div><div class="repo-bar"><div class="repo-progress" style="width:35%"></div></div></div>
+            <div class="repo-card"><div class="repo-name">PAYROLL.CBL</div><div class="repo-lang">COBOL · 23K LOC</div><div class="repo-bar"><div class="repo-progress" style="width:15%"></div></div></div>
+            <div class="repo-card"><div class="repo-name">HR_System.vb</div><div class="repo-lang">VB6 · 41K LOC</div><div class="repo-bar"><div class="repo-progress" style="width:8%"></div></div></div>
+          </div>
+          <div class="board-col">
+            <div class="col-label">PLANNING <span class="col-count">8</span></div>
+            <div class="repo-card"><div class="repo-name">TradingCore</div><div class="repo-lang">J2EE · 112K LOC</div><div class="repo-bar"><div class="repo-progress" style="width:72%"></div></div></div>
+            <div class="repo-card"><div class="repo-name">Claims.ABAP</div><div class="repo-lang">ABAP · 67K LOC</div><div class="repo-bar"><div class="repo-progress" style="width:58%"></div></div></div>
+          </div>
+          <div class="board-col">
+            <div class="col-label">MIGRATION <span class="col-count">5</span></div>
+            <div class="repo-card" style="border-color:rgba(41,171,255,0.4)"><div class="repo-name">CustomerDB</div><div class="repo-lang">Oracle PL/SQL · 38K</div><div class="repo-bar"><div class="repo-progress" style="width:88%"></div></div></div>
+            <div class="repo-card"><div class="repo-name">BatchProcess</div><div class="repo-lang">COBOL · 19K LOC</div><div class="repo-bar"><div class="repo-progress" style="width:64%"></div></div></div>
+          </div>
+          <div class="board-col">
+            <div class="col-label">LIVE ✓ <span class="col-count" style="background:rgba(0,255,200,0.15);color:var(--accent2)">22</span></div>
+            <div class="repo-card" style="border-color:rgba(0,255,200,0.3)"><div class="repo-name">AuthService</div><div class="repo-lang">→ Spring Boot ✓</div><div class="repo-bar"><div class="repo-progress" style="width:100%;background:linear-gradient(90deg,var(--accent2),#00cc9f)"></div></div></div>
+            <div class="repo-card" style="border-color:rgba(0,255,200,0.3)"><div class="repo-name">InvoiceAPI</div><div class="repo-lang">→ FastAPI ✓</div><div class="repo-bar"><div class="repo-progress" style="width:100%;background:linear-gradient(90deg,var(--accent2),#00cc9f)"></div></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="agent-status">
+        <div class="agent-status-header">
+          <div style="font-size:14px;font-weight:700">Agent Swarm Status</div>
+        </div>
+        <div class="agent-row">
+          <div class="agent-indicator ind-green"></div>
+          <div class="agent-name">Archaeologist</div>
+          <div>
+            <div class="agent-task">Parsing BankCore.jar</div>
+            <div class="agent-pct">100%</div>
+          </div>
+        </div>
+        <div class="agent-row">
+          <div class="agent-indicator ind-green"></div>
+          <div class="agent-name">Architect</div>
+          <div>
+            <div class="agent-task">Mapping microservices</div>
+            <div class="agent-pct">87%</div>
+          </div>
+        </div>
+        <div class="agent-row">
+          <div class="agent-indicator ind-yellow"></div>
+          <div class="agent-name">Quantum Planner</div>
+          <div>
+            <div class="agent-task">Running 10K simulations</div>
+            <div class="agent-pct">63%</div>
+          </div>
+        </div>
+        <div class="agent-row">
+          <div class="agent-indicator ind-green"></div>
+          <div class="agent-name">Code Surgeon</div>
+          <div>
+            <div class="agent-task">Generating Spring Boot</div>
+            <div class="agent-pct">92%</div>
+          </div>
+        </div>
+        <div class="agent-row">
+          <div class="agent-indicator ind-yellow"></div>
+          <div class="agent-name">Validator</div>
+          <div>
+            <div class="agent-task">Fuzz testing twin</div>
+            <div class="agent-pct">41%</div>
+          </div>
+        </div>
+        <div class="agent-row">
+          <div class="agent-indicator ind-red"></div>
+          <div class="agent-name">Deployer</div>
+          <div>
+            <div class="agent-task">Waiting on Validator</div>
+            <div class="agent-pct">BLOCKED</div>
+          </div>
+        </div>
+        <div class="agent-row">
+          <div class="agent-indicator ind-green"></div>
+          <div class="agent-name">Optimizer</div>
+          <div>
+            <div class="agent-task">Tuning stack weights</div>
+            <div class="agent-pct">Active</div>
+          </div>
+        </div>
+        <div style="padding:16px 20px;border-top:1px solid var(--border)">
+          <div style="font-size:11px;color:var(--muted);font-family:var(--mono);margin-bottom:8px">ACCURACY TREND</div>
+          <div class="mini-chart">
+            <div class="chart-bar" style="height:50%"></div>
+            <div class="chart-bar" style="height:55%"></div>
+            <div class="chart-bar" style="height:60%"></div>
+            <div class="chart-bar" style="height:58%"></div>
+            <div class="chart-bar" style="height:70%"></div>
+            <div class="chart-bar" style="height:75%"></div>
+            <div class="chart-bar" style="height:80%"></div>
+            <div class="chart-bar" style="height:85%"></div>
+            <div class="chart-bar" style="height:90%"></div>
+            <div class="chart-bar" style="height:88%"></div>
+            <div class="chart-bar" style="height:92%"></div>
+            <div class="chart-bar" style="height:94%;opacity:1;background:var(--accent2)"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== UPLOAD PAGE ==================== -->
+<div id="page-upload" class="page">
+  <div class="upload-page">
+    <div style="margin-bottom:32px">
+      <div class="section-label">QUANTUM ANALYSIS ENGINE</div>
+      <div class="section-title" style="font-size:28px">Upload Your Legacy Code</div>
+      <p style="color:var(--muted);font-family:var(--mono);font-size:13px">ZIP · Git URL · Folder Drop · 23 languages · 10K files/min</p>
+    </div>
+
+    <div class="upload-zone" id="upload-zone" onclick="startAnalysis()">
+      <div class="upload-icon">📦</div>
+      <div class="upload-title">Drop your code archive here</div>
+      <div class="upload-sub">or click to browse · Max 2GB · Encrypted in transit · Zero retention</div>
+      <div style="margin-top:20px">
+        <input type="text" placeholder="Or paste Git URL: https://github.com/your-org/legacy-monolith" style="width:100%;max-width:480px;padding:12px 16px;background:var(--deep);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:var(--mono);font-size:13px;outline:none" onclick="event.stopPropagation()">
+      </div>
+    </div>
+
+    <div style="margin-bottom:12px">
+      <div class="section-label">SAMPLE ENTERPRISE PROJECTS</div>
+    </div>
+    <div class="sample-zips">
+      <div class="zip-card" onclick="loadSample('payroll')">
+        <div class="zip-icon">📄</div>
+        <div class="zip-name">PAYROLL.CBL</div>
+        <div class="zip-meta">COBOL · 23K LOC · IBM z/OS</div>
+      </div>
+      <div class="zip-card" onclick="loadSample('banking')">
+        <div class="zip-icon">🏦</div>
+        <div class="zip-name">BankCore_EJB</div>
+        <div class="zip-meta">J2EE · 84K LOC · WebLogic</div>
+      </div>
+      <div class="zip-card" onclick="loadSample('hr')">
+        <div class="zip-icon">👥</div>
+        <div class="zip-name">HR_Suite.vb</div>
+        <div class="zip-meta">VB6 · 41K LOC · Win32</div>
+      </div>
+      <div class="zip-card" onclick="loadSample('sap')">
+        <div class="zip-icon">⚙️</div>
+        <div class="zip-name">SAP_Claims.ABAP</div>
+        <div class="zip-meta">ABAP · 67K LOC · SAP ECC</div>
+      </div>
+      <div class="zip-card" onclick="loadSample('php')">
+        <div class="zip-icon">🌐</div>
+        <div class="zip-name">eComm_Legacy.php</div>
+        <div class="zip-meta">PHP4 · 31K LOC · Apache</div>
+      </div>
+    </div>
+
+    <div class="analysis-panel" id="analysis-panel" style="display:none">
+      <div class="analysis-title">🧠 Quantum Analysis in Progress — <span id="analysis-file">BankCore_EJB</span></div>
+      <div class="progress-steps" id="progress-steps">
+        <div class="progress-step">
+          <div class="step-icon step-done">✅</div>
+          <div class="step-info">
+            <div class="step-label">UPLOAD COMPLETE</div>
+            <div class="step-detail">84,412 files extracted · AES-256 encrypted</div>
+          </div>
+        </div>
+        <div class="progress-step">
+          <div class="step-icon step-done">✅</div>
+          <div class="step-info">
+            <div class="step-label">LANGUAGE DETECTION</div>
+            <div class="step-detail">Java EE (87%) · XML (8%) · SQL (5%) · 23 langs total</div>
+          </div>
+        </div>
+        <div class="progress-step" id="step-parse">
+          <div class="step-icon step-active">⚡</div>
+          <div class="step-info">
+            <div class="step-label">DEEP AST PARSING</div>
+            <div class="step-detail" id="parse-detail">Tree-sitter cluster · 6,847 / 10,000 files complete</div>
+            <div class="step-bar"><div class="step-fill" id="parse-bar" style="width:68%"></div></div>
+          </div>
+        </div>
+        <div class="progress-step">
+          <div class="step-icon step-pending" id="icon-pattern">🔍</div>
+          <div class="step-info">
+            <div class="step-label">PATTERN ARCHAEOLOGY</div>
+            <div class="step-detail">100+ AI patterns · God objects · Spaghetti index</div>
+          </div>
+        </div>
+        <div class="progress-step">
+          <div class="step-icon step-pending" id="icon-twin">🌐</div>
+          <div class="step-info">
+            <div class="step-label">DIGITAL TWIN SYNTHESIS</div>
+            <div class="step-detail">WebAssembly MicroVM · Logic extraction</div>
+          </div>
+        </div>
+        <div class="progress-step">
+          <div class="step-icon step-pending" id="icon-roadmap">🗺</div>
+          <div class="step-info">
+            <div class="step-label">QUANTUM ROADMAP GENERATION</div>
+            <div class="step-detail">Monte Carlo · 10,000 simulation paths</div>
+          </div>
+        </div>
+      </div>
+      <button id="view-report-btn" class="btn-primary" style="display:none;margin-top:20px" onclick="showPage('report')">View Full Quantum Report →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== REPORT PAGE ==================== -->
+<div id="page-report" class="page">
+  <div class="report-page">
+    <div style="margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+      <div>
+        <div class="section-label">QUANTUM REPORT</div>
+        <div style="font-size:22px;font-weight:800;letter-spacing:-0.5px">BankCore_EJB — J2EE → Kubernetes</div>
+      </div>
+      <div style="display:flex;gap:8px">
+        <div style="background:rgba(0,255,200,0.12);color:var(--accent2);border:1px solid rgba(0,255,200,0.3);padding:8px 16px;border-radius:8px;font-size:13px;font-family:var(--mono)">94% Confidence</div>
+        <div style="background:rgba(41,171,255,0.12);color:var(--accent);border:1px solid var(--border);padding:8px 16px;border-radius:8px;font-size:13px;font-family:var(--mono)">₹8.2L Savings</div>
+      </div>
+    </div>
+
+    <div class="report-nav">
+      <button class="report-tab active" onclick="switchReportTab(this,'agent-chat-section')">Agent Chat</button>
+      <button class="report-tab" onclick="switchReportTab(this,'roadmap-section')">Quantum Roadmap</button>
+      <button class="report-tab" onclick="switchReportTab(this,'code-section')">Code Migration</button>
+      <button class="report-tab" onclick="switchReportTab(this,'twin-section')">Digital Twin</button>
+      <button class="report-tab" onclick="switchReportTab(this,'arch-section')">Architecture Galaxy</button>
+    </div>
+
+    <!-- AGENT CHAT -->
+    <div id="agent-chat-section" class="report-section">
+      <div class="report-grid">
+        <div class="report-card" style="grid-column:1/-1">
+          <div class="report-card-title">🧠 Agent Collaboration Log — Live</div>
+          <div class="agent-chat">
+            <div class="chat-msg">
+              <div class="chat-avatar av-planner">PLN</div>
+              <div class="chat-content">
+                <div class="chat-agent-name">QUANTUM PLANNER · 09:14:22</div>
+                <div class="chat-bubble">Identified <span class="highlight">3 bounded contexts</span> in monolith: Customer Management, Transaction Processing, Risk Engine. Recommend strangler-fig pattern with 4-phase rollout. <span class="ok-text">Big Bang confidence: 94%</span></div>
+              </div>
+            </div>
+            <div class="chat-msg">
+              <div class="chat-avatar av-refactor">REF</div>
+              <div class="chat-content">
+                <div class="chat-agent-name">CODE SURGEON · 09:14:45</div>
+                <div class="chat-bubble">Generated <span class="highlight">87% Spring Boot conversion</span> from EJB session beans. CustomerServiceImpl (1,400 LOC) → CustomerController + CustomerRepository (Spring Data JPA). <span class="ok-text">Compile-verified. Tests passing.</span></div>
+              </div>
+            </div>
+            <div class="chat-msg">
+              <div class="chat-avatar av-tester">TST</div>
+              <div class="chat-content">
+                <div class="chat-agent-name">VALIDATOR · 09:15:03</div>
+                <div class="chat-bubble"><span class="warn-text">⚠ Found 14% logic divergence in interest calculation module (lines 847-923).</span> Root cause: implicit decimal rounding in JDBC vs JPA. <span class="ok-text">Auto-fixed with BigDecimal migration. Re-testing...</span> 1,200 fuzz test inputs — <span class="highlight">100% match restored.</span></div>
+              </div>
+            </div>
+            <div class="chat-msg">
+              <div class="chat-avatar av-deployer">DEP</div>
+              <div class="chat-content">
+                <div class="chat-agent-name">DEPLOYER · 09:15:31</div>
+                <div class="chat-bubble">Generated Kubernetes manifests: <span class="highlight">3 Deployments, 1 StatefulSet (PostgreSQL), 2 Services, 1 Ingress.</span> Helm chart v0.1.0 ready. Terraform modules for AWS EKS validated. <span class="ok-text">Estimated deploy: 45 minutes.</span></div>
+              </div>
+            </div>
+            <div class="chat-msg">
+              <div class="chat-avatar" style="background:rgba(255,107,53,0.2);color:var(--accent3)">OPT</div>
+              <div class="chat-content">
+                <div class="chat-agent-name">OPTIMIZER · 09:16:02</div>
+                <div class="chat-bubble">Genetic algorithm result: <span class="highlight">Spring Boot + PostgreSQL + Redis cache</span> wins on 3.1x ROI. Rejected: Quarkus (18% slower cold start in load profile), Micronaut (higher dev team ramp-up). Stack confidence: <span class="ok-text">96.4%</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ROADMAP -->
+    <div id="roadmap-section" class="report-section" style="display:none">
+      <div class="report-card" style="margin-bottom:16px">
+        <div class="report-card-title">⚡ Quantum Roadmap — 12 Strategies Ranked by ROI</div>
+        <div class="roadmap">
+          <div class="road-item">
+            <div class="road-badge badge-star">⭐ #1 PICK</div>
+            <div class="road-info">
+              <div class="road-name">Big Bang — Monolith → Microservices</div>
+              <div class="road-meta">94% confidence · 16 weeks · 5 engineers</div>
+              <div class="confidence-bar"><div class="conf-fill" style="width:94%;background:var(--gold)"></div></div>
+            </div>
+            <div class="road-right">
+              <div class="road-roi">3.1x ROI</div>
+              <div class="road-cost">₹8.2L cost</div>
+            </div>
+          </div>
+          <div class="road-item">
+            <div class="road-badge badge-good">#2</div>
+            <div class="road-info">
+              <div class="road-name">Strangler Fig — Incremental Replace</div>
+              <div class="road-meta">87% confidence · 24 weeks · 3 engineers</div>
+              <div class="confidence-bar"><div class="conf-fill" style="width:87%;background:var(--accent)"></div></div>
+            </div>
+            <div class="road-right">
+              <div class="road-roi">2.8x ROI</div>
+              <div class="road-cost">₹6.9L cost</div>
+            </div>
+          </div>
+          <div class="road-item">
+            <div class="road-badge badge-ok">#3</div>
+            <div class="road-info">
+              <div class="road-name">Microservices — Domain-Driven Decomposition</div>
+              <div class="road-meta">76% confidence · 36 weeks · 8 engineers</div>
+              <div class="confidence-bar"><div class="conf-fill" style="width:76%;background:var(--accent2)"></div></div>
+            </div>
+            <div class="road-right">
+              <div class="road-roi">2.1x ROI</div>
+              <div class="road-cost">₹14.2L cost</div>
+            </div>
+          </div>
+          <div class="road-item">
+            <div class="road-badge badge-ok">#4</div>
+            <div class="road-info">
+              <div class="road-name">Lift & Shift — Containerize Monolith First</div>
+              <div class="road-meta">82% confidence · 8 weeks · 2 engineers</div>
+              <div class="confidence-bar"><div class="conf-fill" style="width:82%;background:var(--muted)"></div></div>
+            </div>
+            <div class="road-right">
+              <div class="road-roi">1.6x ROI</div>
+              <div class="road-cost">₹2.1L cost</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CODE MIGRATION -->
+    <div id="code-section" class="report-section" style="display:none">
+      <div class="report-card">
+        <div class="report-card-title">🤖 Autonomous Migration — CustomerServiceImpl</div>
+        <div style="margin-bottom:12px;font-size:13px;color:var(--muted);font-family:var(--mono)">
+          AI generated 92% of this migration · 1,400 LOC → 280 LOC (80% reduction) · Compile verified
+        </div>
+        <div class="code-diff">
+          <div class="diff-header">
+            <div class="diff-label diff-before">BEFORE: J2EE / JDBC (1,400 LOC nightmare)</div>
+            <div class="diff-label diff-after">AFTER: Spring Boot / JPA (280 LOC)</div>
+          </div>
+          <div class="diff-body">
+            <div class="diff-col diff-before-bg">
+              <div class="code-line"><span class="kw">@Stateless</span></div>
+              <div class="code-line"><span class="cmt">// 14 God Objects, Spaghetti: 92%</span></div>
+              <div class="code-line"><span class="kw">public class</span> <span class="cls">CustomerServiceBean</span></div>
+              <div class="code-line">  <span class="kw">implements</span> <span class="cls">CustomerServiceRemote</span> {</div>
+              <div class="code-line"></div>
+              <div class="code-line">  <span class="kw">private</span> Connection getConn() {</div>
+              <div class="code-line">    Context ctx = <span class="kw">new</span> InitialContext();</div>
+              <div class="code-line">    DataSource ds = (DataSource)</div>
+              <div class="code-line">      ctx.lookup(<span class="str">"java:comp/env/jdbc"</span>);</div>
+              <div class="code-line">    <span class="kw">return</span> ds.getConnection();</div>
+              <div class="code-line">  }</div>
+              <div class="code-line"></div>
+              <div class="code-line">  <span class="kw">public</span> Customer findById(<span class="kw">long</span> id) {</div>
+              <div class="code-line">    Connection c = getConn();</div>
+              <div class="code-line">    PreparedStatement ps = c.prepare(</div>
+              <div class="code-line">      <span class="str">"SELECT * FROM CUST WHERE ID=?"</span>);</div>
+              <div class="code-line">    ps.setLong(1, id);</div>
+              <div class="code-line">    ResultSet rs = ps.executeQuery();</div>
+              <div class="code-line">    <span class="cmt">// ... 80 more lines of JDBC</span></div>
+              <div class="code-line">  }</div>
+              <div class="code-line">  <span class="cmt">// 1,380 more lines...</span></div>
+            </div>
+            <div class="diff-col diff-after-bg">
+              <div class="code-line"><span class="ann">@RestController</span></div>
+              <div class="code-line"><span class="ann">@RequestMapping</span>(<span class="str">"/api/customers"</span>)</div>
+              <div class="code-line"><span class="kw">public class</span> <span class="cls">CustomerController</span> {</div>
+              <div class="code-line"></div>
+              <div class="code-line">  <span class="ann">@Autowired</span></div>
+              <div class="code-line">  <span class="kw">private</span> <span class="cls">CustomerRepository</span> repo;</div>
+              <div class="code-line"></div>
+              <div class="code-line">  <span class="ann">@GetMapping</span>(<span class="str">"/{id}"</span>)</div>
+              <div class="code-line">  <span class="kw">public</span> <span class="cls">ResponseEntity</span>&lt;Customer&gt;</div>
+              <div class="code-line">    findById(<span class="ann">@PathVariable</span> Long id) {</div>
+              <div class="code-line">    <span class="kw">return</span> repo.findById(id)</div>
+              <div class="code-line">      .map(<span class="cls">ResponseEntity</span>::ok)</div>
+              <div class="code-line">      .orElse(notFound().build());</div>
+              <div class="code-line">  }</div>
+              <div class="code-line">}</div>
+              <div class="code-line"></div>
+              <div class="code-line"><span class="ann">@Repository</span></div>
+              <div class="code-line"><span class="kw">public interface</span> <span class="cls">CustomerRepository</span></div>
+              <div class="code-line">  <span class="kw">extends</span> JpaRepository&lt;Customer, Long&gt; {}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DIGITAL TWIN -->
+    <div id="twin-section" class="report-section" style="display:none">
+      <div class="report-grid">
+        <div class="report-card">
+          <div class="report-card-title">💹 Digital Twin — Performance</div>
+          <div class="twin-metrics">
+            <div class="twin-metric">
+              <div class="twin-num twin-old">240ms</div>
+              <div class="twin-label">LEGACY P95 LATENCY</div>
+            </div>
+            <div class="twin-metric">
+              <div class="twin-num twin-new">28ms</div>
+              <div class="twin-label">MODERN P95 LATENCY</div>
+            </div>
+            <div class="twin-metric">
+              <div class="twin-num" style="color:var(--accent2)">98%</div>
+              <div class="twin-label">OUTPUT MATCH RATE</div>
+            </div>
+            <div class="twin-metric">
+              <div class="twin-num" style="color:var(--gold)">87%</div>
+              <div class="twin-label">FASTER RESPONSE</div>
+            </div>
+          </div>
+          <div class="perf-bars">
+            <div style="font-size:11px;color:var(--muted);font-family:var(--mono);margin-bottom:10px">PERFORMANCE COMPARISON</div>
+            <div class="perf-row">
+              <div class="perf-label">API Latency</div>
+              <div class="perf-track"><div class="perf-fill" style="width:85%;background:linear-gradient(90deg,var(--danger),var(--warn))"></div></div>
+              <div class="perf-val" style="color:var(--danger)">240ms</div>
+            </div>
+            <div class="perf-row">
+              <div class="perf-label" style="color:var(--accent2)">API Latency</div>
+              <div class="perf-track"><div class="perf-fill" style="width:10%;background:var(--accent2)"></div></div>
+              <div class="perf-val" style="color:var(--accent2)">28ms</div>
+            </div>
+            <div class="perf-row">
+              <div class="perf-label">Throughput</div>
+              <div class="perf-track"><div class="perf-fill" style="width:25%;background:var(--danger)"></div></div>
+              <div class="perf-val" style="color:var(--danger)">120 rps</div>
+            </div>
+            <div class="perf-row">
+              <div class="perf-label" style="color:var(--accent2)">Throughput</div>
+              <div class="perf-track"><div class="perf-fill" style="width:90%;background:var(--accent2)"></div></div>
+              <div class="perf-val" style="color:var(--accent2)">2.8K rps</div>
+            </div>
+            <div class="perf-row">
+              <div class="perf-label">Memory</div>
+              <div class="perf-track"><div class="perf-fill" style="width:80%;background:var(--warn)"></div></div>
+              <div class="perf-val" style="color:var(--warn)">4.2 GB</div>
+            </div>
+            <div class="perf-row">
+              <div class="perf-label" style="color:var(--accent2)">Memory</div>
+              <div class="perf-track"><div class="perf-fill" style="width:20%;background:var(--accent2)"></div></div>
+              <div class="perf-val" style="color:var(--accent2)">512 MB</div>
+            </div>
+          </div>
+        </div>
+        <div class="report-card">
+          <div class="report-card-title">🔬 Complexity Matrix</div>
+          <div style="display:flex;flex-direction:column;gap:12px;margin-top:4px">
+            <div>
+              <div style="display:flex;justify-content:space-between;font-size:12px;font-family:var(--mono);margin-bottom:6px"><span style="color:var(--muted)">Cyclomatic Complexity</span><span style="color:var(--danger)">8.7 / 10</span></div>
+              <div style="height:6px;background:var(--border);border-radius:3px;overflow:hidden"><div style="height:100%;width:87%;background:linear-gradient(90deg,var(--warn),var(--danger));border-radius:3px"></div></div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;font-size:12px;font-family:var(--mono);margin-bottom:6px"><span style="color:var(--muted)">God Objects</span><span style="color:var(--accent3)">14 detected</span></div>
+              <div style="height:6px;background:var(--border);border-radius:3px;overflow:hidden"><div style="height:100%;width:70%;background:var(--accent3);border-radius:3px"></div></div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;font-size:12px;font-family:var(--mono);margin-bottom:6px"><span style="color:var(--muted)">Spaghetti Index</span><span style="color:var(--danger)">92%</span></div>
+              <div style="height:6px;background:var(--border);border-radius:3px;overflow:hidden"><div style="height:100%;width:92%;background:var(--danger);border-radius:3px"></div></div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;font-size:12px;font-family:var(--mono);margin-bottom:6px"><span style="color:var(--muted)">Test Coverage</span><span style="color:var(--warn)">6.3%</span></div>
+              <div style="height:6px;background:var(--border);border-radius:3px;overflow:hidden"><div style="height:100%;width:6.3%;background:var(--warn);border-radius:3px"></div></div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;font-size:12px;font-family:var(--mono);margin-bottom:6px"><span style="color:var(--muted)">Dead Code %</span><span style="color:var(--muted)">31%</span></div>
+              <div style="height:6px;background:var(--border);border-radius:3px;overflow:hidden"><div style="height:100%;width:31%;background:var(--muted);border-radius:3px"></div></div>
+            </div>
+            <div style="border-top:1px solid var(--border);padding-top:14px;margin-top:4px">
+              <div style="font-size:11px;color:var(--muted);font-family:var(--mono);margin-bottom:8px">MIGRATION READINESS</div>
+              <div style="font-size:28px;font-weight:800;color:var(--gold)">67 / 100</div>
+              <div style="font-size:12px;color:var(--muted);font-family:var(--mono);margin-top:4px">High complexity but strong ROI. Proceed with Quantum plan.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ARCHITECTURE GALAXY -->
+    <div id="arch-section" class="report-section" style="display:none">
+      <div class="report-card">
+        <div class="report-card-title">🌌 Architecture Galaxy — Module Dependency Map</div>
+        <div style="font-size:12px;color:var(--muted);font-family:var(--mono);margin-bottom:16px">Click a module to explore. Orbit lines = dependencies. Size = LOC. Color = risk level.</div>
+        <div class="galaxy-container">
+          <svg class="galaxy-svg" viewBox="0 0 680 200" xmlns="http://www.w3.org/2000/svg">
+            <!-- Orbits -->
+            <ellipse cx="340" cy="100" rx="120" ry="60" fill="none" stroke="rgba(41,171,255,0.1)" stroke-width="0.5" stroke-dasharray="4 4"/>
+            <ellipse cx="340" cy="100" rx="200" ry="80" fill="none" stroke="rgba(41,171,255,0.07)" stroke-width="0.5" stroke-dasharray="4 4"/>
+            <!-- Center: Core -->
+            <g class="planet" onclick="">
+              <circle cx="340" cy="100" r="22" fill="rgba(255,71,87,0.25)" stroke="rgba(255,71,87,0.7)" stroke-width="1"/>
+              <text x="340" y="104" text-anchor="middle" font-size="9" fill="#ff4757" font-family="IBM Plex Mono" font-weight="700">CORE</text>
+            </g>
+            <!-- Planet 1 -->
+            <line x1="340" y1="78" x2="340" y2="45" stroke="rgba(41,171,255,0.3)" stroke-width="0.5"/>
+            <g class="planet">
+              <circle cx="340" cy="38" r="14" fill="rgba(41,171,255,0.2)" stroke="rgba(41,171,255,0.6)" stroke-width="1"/>
+              <text x="340" y="42" text-anchor="middle" font-size="8" fill="#29abff" font-family="IBM Plex Mono">AUTH</text>
+            </g>
+            <!-- Planet 2 -->
+            <line x1="322" y1="88" x2="200" y2="60" stroke="rgba(0,255,200,0.3)" stroke-width="0.5"/>
+            <g class="planet">
+              <circle cx="190" cy="57" r="16" fill="rgba(0,255,200,0.15)" stroke="rgba(0,255,200,0.5)" stroke-width="1"/>
+              <text x="190" y="61" text-anchor="middle" font-size="8" fill="#00ffc8" font-family="IBM Plex Mono">TXNS</text>
+            </g>
+            <!-- Planet 3 -->
+            <line x1="358" y1="88" x2="480" y2="60" stroke="rgba(255,209,102,0.3)" stroke-width="0.5"/>
+            <g class="planet">
+              <circle cx="490" cy="57" r="18" fill="rgba(255,209,102,0.15)" stroke="rgba(255,209,102,0.5)" stroke-width="1"/>
+              <text x="490" y="61" text-anchor="middle" font-size="8" fill="#ffd166" font-family="IBM Plex Mono">RISK</text>
+            </g>
+            <!-- Planet 4 -->
+            <line x1="340" y1="122" x2="240" y2="160" stroke="rgba(255,107,53,0.3)" stroke-width="0.5"/>
+            <g class="planet">
+              <circle cx="230" cy="165" r="12" fill="rgba(255,107,53,0.15)" stroke="rgba(255,107,53,0.4)" stroke-width="1"/>
+              <text x="230" y="169" text-anchor="middle" font-size="7" fill="#ff6b35" font-family="IBM Plex Mono">RPT</text>
+            </g>
+            <!-- Planet 5 -->
+            <line x1="340" y1="122" x2="440" y2="155" stroke="rgba(41,171,255,0.2)" stroke-width="0.5"/>
+            <g class="planet">
+              <circle cx="450" cy="158" r="11" fill="rgba(41,171,255,0.12)" stroke="rgba(41,171,255,0.35)" stroke-width="1"/>
+              <text x="450" y="162" text-anchor="middle" font-size="7" fill="#29abff" font-family="IBM Plex Mono">UI</text>
+            </g>
+            <!-- Outer -->
+            <g class="planet">
+              <circle cx="120" cy="100" r="10" fill="rgba(0,255,200,0.1)" stroke="rgba(0,255,200,0.25)" stroke-width="0.5"/>
+              <text x="120" y="104" text-anchor="middle" font-size="7" fill="#00ffc8" font-family="IBM Plex Mono">DB</text>
+            </g>
+            <line x1="130" y1="100" x2="170" y2="80" stroke="rgba(0,255,200,0.15)" stroke-width="0.5"/>
+            <g class="planet">
+              <circle cx="570" cy="100" r="10" fill="rgba(255,71,87,0.1)" stroke="rgba(255,71,87,0.25)" stroke-width="0.5"/>
+              <text x="570" y="104" text-anchor="middle" font-size="7" fill="#ff4757" font-family="IBM Plex Mono">EJB</text>
+            </g>
+            <line x1="560" y1="100" x2="510" y2="75" stroke="rgba(255,71,87,0.15)" stroke-width="0.5"/>
+          </svg>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:16px">
+          <div style="font-size:12px;font-family:var(--mono);display:flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:50%;background:var(--danger);display:inline-block"></span>Critical</div>
+          <div style="font-size:12px;font-family:var(--mono);display:flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:50%;background:var(--gold);display:inline-block"></span>High Risk</div>
+          <div style="font-size:12px;font-family:var(--mono);display:flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:50%;background:var(--accent);display:inline-block"></span>Medium</div>
+          <div style="font-size:12px;font-family:var(--mono);display:flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:50%;background:var(--accent2);display:inline-block"></span>Low Risk</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== ENTERPRISE PAGE ==================== -->
+<div id="page-enterprise" class="page">
+  <div class="enterprise-page">
+    <div style="margin-bottom:32px">
+      <div class="section-label">ENTERPRISE WAR ROOM</div>
+      <div class="section-title" style="font-size:28px">Command & Control for 50-User Teams</div>
+      <p style="color:var(--muted);font-family:var(--mono);font-size:13px">SOC2 · GDPR · CI/CD Integration · One-Click Deploy · Self-Improving ML</p>
+    </div>
+
+    <div class="ent-grid">
+      <!-- TEAM -->
+      <div class="ent-card">
+        <div class="ent-title">👥 Team — Active Now</div>
+        <div class="team-list">
+          <div class="team-member"><div class="team-avatar">AK</div><div class="team-info"><div class="team-name">Ananya Krishnan</div><div class="team-role">Quantum Lead · BankCore</div></div><span class="team-status ts-active">Active</span></div>
+          <div class="team-member"><div class="team-avatar">RS</div><div class="team-info"><div class="team-name">Rahul Sharma</div><div class="team-role">Migration Eng · PAYROLL</div></div><span class="team-status ts-active">Active</span></div>
+          <div class="team-member"><div class="team-avatar">PM</div><div class="team-info"><div class="team-name">Priya Mehta</div><div class="team-role">Validator · TradingCore</div></div><span class="team-status ts-idle">Reviewing</span></div>
+          <div class="team-member"><div class="team-avatar">VJ</div><div class="team-info"><div class="team-name">Vikram Joshi</div><div class="team-role">Architect · Claims</div></div><span class="team-status ts-active">Active</span></div>
+          <div class="team-member"><div class="team-avatar">DN</div><div class="team-info"><div class="team-name">Deepa Nair</div><div class="team-role">DevOps · Deploy</div></div><span class="team-status ts-idle">Standby</span></div>
+        </div>
+      </div>
+
+      <!-- COMPLIANCE -->
+      <div class="ent-card">
+        <div class="ent-title">🛡 Compliance Status</div>
+        <div class="compliance-grid">
+          <div class="compliance-item"><div class="comp-icon">✅</div><div><div class="comp-name">SOC 2 Type II</div><div class="comp-status">Verified</div></div></div>
+          <div class="compliance-item"><div class="comp-icon">✅</div><div><div class="comp-name">GDPR</div><div class="comp-status">Compliant</div></div></div>
+          <div class="compliance-item"><div class="comp-icon">✅</div><div><div class="comp-name">ISO 27001</div><div class="comp-status">Certified</div></div></div>
+          <div class="compliance-item"><div class="comp-icon">✅</div><div><div class="comp-name">RBI IT Guidelines</div><div class="comp-status">Ready</div></div></div>
+          <div class="compliance-item"><div class="comp-icon">✅</div><div><div class="comp-name">CERT-In</div><div class="comp-status">Audited</div></div></div>
+          <div class="compliance-item"><div class="comp-icon">🔄</div><div><div class="comp-name">PCI DSS</div><div class="comp-status" style="color:var(--warn)">In Progress</div></div></div>
+        </div>
+      </div>
+
+      <!-- CI/CD PIPELINE -->
+      <div class="ent-card">
+        <div class="ent-title">🔄 CI/CD Pipeline</div>
+        <div class="pipeline-list">
+          <div class="pipeline-item">
+            <div class="pipeline-dot" style="background:var(--accent2)"></div>
+            <div class="pipeline-info"><div class="pipeline-name">CustomerService — main</div><div class="pipeline-time">✅ Passed · 3m 42s · 2 min ago</div></div>
+            <div class="pipeline-action">Deploy →</div>
+          </div>
+          <div class="pipeline-item">
+            <div class="pipeline-dot" style="background:var(--warn)"></div>
+            <div class="pipeline-info"><div class="pipeline-name">TransactionAPI — feat/jpa</div><div class="pipeline-time">⚠ 2 warnings · 8m 11s · 5 min ago</div></div>
+            <div class="pipeline-action">Review →</div>
+          </div>
+          <div class="pipeline-item">
+            <div class="pipeline-dot" style="background:var(--danger)"></div>
+            <div class="pipeline-info"><div class="pipeline-name">RiskEngine — hotfix</div><div class="pipeline-time">❌ 1 test failed · 12m 3s · 12 min ago</div></div>
+            <div class="pipeline-action">Debug →</div>
+          </div>
+          <div class="pipeline-item">
+            <div class="pipeline-dot" style="background:var(--accent)"></div>
+            <div class="pipeline-info"><div class="pipeline-name">AuthService — release/v2</div><div class="pipeline-time">🔵 Running · 4m 18s in progress</div></div>
+            <div class="pipeline-action">Watch →</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ML ACCURACY -->
+      <div class="ent-card">
+        <div class="ent-title">🧬 Self-Improving ML — Agent Accuracy</div>
+        <div class="ml-accuracy-bars">
+          <div class="acc-row"><div class="acc-label">Archaeologist</div><div class="acc-track"><div class="acc-fill" style="width:97%"></div></div><div class="acc-val">97.3%</div></div>
+          <div class="acc-row"><div class="acc-label">Architect</div><div class="acc-track"><div class="acc-fill" style="width:94%"></div></div><div class="acc-val">94.1%</div></div>
+          <div class="acc-row"><div class="acc-label">Planner</div><div class="acc-track"><div class="acc-fill" style="width:92%"></div></div><div class="acc-val">92.8%</div></div>
+          <div class="acc-row"><div class="acc-label">Code Surgeon</div><div class="acc-track"><div class="acc-fill" style="width:89%"></div></div><div class="acc-val">89.4%</div></div>
+          <div class="acc-row"><div class="acc-label">Validator</div><div class="acc-track"><div class="acc-fill" style="width:96%"></div></div><div class="acc-val">96.2%</div></div>
+          <div class="acc-row"><div class="acc-label">Deployer</div><div class="acc-track"><div class="acc-fill" style="width:99%"></div></div><div class="acc-val">99.1%</div></div>
+          <div class="acc-row"><div class="acc-label">Optimizer</div><div class="acc-track"><div class="acc-fill" style="width:87%"></div></div><div class="acc-val">87.6%</div></div>
+        </div>
+        <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border);font-size:12px;color:var(--muted);font-family:var(--mono)">
+          ↑ Improving 2.4% / month · Self-tuning on 247 completed migrations
+        </div>
+      </div>
+    </div>
+
+    <!-- DEPLOY SECTION -->
+    <div class="ent-card" style="margin-bottom:16px">
+      <div class="ent-title">🚀 One-Click Deploy — Generated Artifacts</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px">
+        <div style="background:var(--deep);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center;cursor:pointer;transition:border-color 0.2s" onmouseover="this.style.borderColor='var(--accent2)'" onmouseout="this.style.borderColor='var(--border)'">
+          <div style="font-size:24px;margin-bottom:8px">🐳</div>
+          <div style="font-size:12px;font-weight:700;font-family:var(--mono)">Dockerfile</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:4px">Multi-stage · Alpine</div>
+        </div>
+        <div style="background:var(--deep);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center;cursor:pointer;transition:border-color 0.2s" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+          <div style="font-size:24px;margin-bottom:8px">⚙️</div>
+          <div style="font-size:12px;font-weight:700;font-family:var(--mono)">Helm Chart</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:4px">v0.1.0 · K8s 1.29</div>
+        </div>
+        <div style="background:var(--deep);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center;cursor:pointer;transition:border-color 0.2s" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='var(--border)'">
+          <div style="font-size:24px;margin-bottom:8px">🏗</div>
+          <div style="font-size:12px;font-weight:700;font-family:var(--mono)">Terraform</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:4px">AWS EKS · VPC</div>
+        </div>
+        <div style="background:var(--deep);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center;cursor:pointer;transition:border-color 0.2s" onmouseover="this.style.borderColor='var(--accent2)'" onmouseout="this.style.borderColor='var(--border)'">
+          <div style="font-size:24px;margin-bottom:8px">🔄</div>
+          <div style="font-size:12px;font-weight:700;font-family:var(--mono)">GitHub Actions</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:4px">CI/CD Pipeline</div>
+        </div>
+        <div style="background:var(--deep);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center;cursor:pointer;transition:border-color 0.2s" onmouseover="this.style.borderColor='var(--accent3)'" onmouseout="this.style.borderColor='var(--border)'">
+          <div style="font-size:24px;margin-bottom:8px">📊</div>
+          <div style="font-size:12px;font-weight:700;font-family:var(--mono)">Prometheus</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:4px">Metrics · Grafana</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  const tabs = ['landing','dashboard','upload','report','enterprise'];
+  const idx = tabs.indexOf(name);
+  document.querySelectorAll('.nav-tab')[idx]?.classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function switchReportTab(el, sectionId) {
+  document.querySelectorAll('.report-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.report-section').forEach(s => s.style.display = 'none');
+  el.classList.add('active');
+  document.getElementById(sectionId).style.display = 'block';
+}
+
+function joinWaitlist() {
+  const email = document.getElementById('waitlist-email').value;
+  if (email && email.includes('@')) {
+    document.getElementById('waitlist-msg').innerHTML = '🎉 You\'re #128 on the waitlist! Check your inbox for early access.';
+    document.getElementById('waitlist-email').value = '';
+  }
+}
+
+let analysisRunning = false;
+function startAnalysis() { loadSample('banking'); }
+function loadSample(type) {
+  if (analysisRunning) return;
+  analysisRunning = true;
+  const names = { payroll:'PAYROLL.CBL', banking:'BankCore_EJB', hr:'HR_Suite.vb', sap:'SAP_Claims.ABAP', php:'eComm_Legacy.php' };
+  document.getElementById('analysis-file').textContent = names[type] || type;
+  const panel = document.getElementById('analysis-panel');
+  panel.style.display = 'block';
+  panel.scrollIntoView({ behavior:'smooth', block:'nearest' });
+  document.getElementById('view-report-btn').style.display = 'none';
+
+  let pct = 68;
+  const parseBar = document.getElementById('parse-bar');
+  const parseDetail = document.getElementById('parse-detail');
+  const interval = setInterval(() => {
+    pct = Math.min(100, pct + Math.random() * 8 + 3);
+    parseBar.style.width = pct + '%';
+    parseDetail.textContent = 'Tree-sitter cluster · ' + Math.floor(pct * 100) + ' / 10,000 files complete';
+    if (pct >= 100) {
+      clearInterval(interval);
+      document.getElementById('step-parse').querySelector('.step-icon').className = 'step-icon step-done';
+      document.getElementById('step-parse').querySelector('.step-icon').textContent = '✅';
+      setTimeout(() => {
+        document.getElementById('icon-pattern').className = 'step-icon step-done';
+        document.getElementById('icon-pattern').textContent = '✅';
+      }, 800);
+      setTimeout(() => {
+        document.getElementById('icon-twin').className = 'step-icon step-done';
+        document.getElementById('icon-twin').textContent = '✅';
+      }, 1800);
+      setTimeout(() => {
+        document.getElementById('icon-roadmap').className = 'step-icon step-done';
+        document.getElementById('icon-roadmap').textContent = '✅';
+        document.getElementById('view-report-btn').style.display = 'block';
+        analysisRunning = false;
+      }, 2800);
+    }
+  }, 120);
+}
+</script>
+</body>
+</html>
